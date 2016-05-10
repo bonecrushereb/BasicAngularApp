@@ -1,0 +1,25 @@
+{
+  "name": "basic_angular_app",
+  "version": "1.0.0",
+  "description": "a basic app using angular",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bonecrushereb/BasicAngularApp.git"
+  },
+  "author": "bonecrushereb@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bonecrushereb/BasicAngularApp/issues"
+  },
+  "homepage": "https://github.com/bonecrushereb/BasicAngularApp#readme",
+  "devDependencies": {
+    "angular": "^1.5.5",
+    "gulp": "^3.9.1",
+    "webpack-stream": "^3.2.0"
+  }
+}
