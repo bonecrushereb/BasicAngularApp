@@ -1,9 +1,14 @@
 const gulp = require('gulp');
+const eslint = require('gulp-eslint');
 const webpack = require('webpack-stream');
+
+
+const files = ['*.js', './app'];
 
 gulp.task('webpack:dev', () => {
   gulp.src('app/js/entry.js')
     .pipe(webpack({
+      devtool: 'source-map',
       module: {
         loaders: [
           { test: /\.css$/, loader: 'style!css' }
@@ -21,5 +26,11 @@ gulp.task('static:dev', () => {
     .pipe(gulp.dest('./build'));
 });
 
-gulp.task('build:dev', ['webpack:dev', 'static:dev']);
+gulp.task('lint:dev', () => {
+  return gulp.src(files)
+  .pipe(eslint())
+  .pipe(eslint.format());
+});
+
+gulp.task('build:dev', ['webpack:dev', 'static:dev', 'lint:dev']);
 gulp.task('default', ['build:dev']);
