@@ -1,13 +1,14 @@
 {
   "env": {
-    "mocha": true,
-    "node": true,
+    "protractor": true,
+    "browser": true,
     "es6": true
   },
   "globals": {
 
   },
   "rules": {
+    "indent": ["error", 2],
     "comma-dangle": 2,
     "no-cond-assign": 2,
     "no-console": 0,
@@ -130,7 +131,6 @@
     "eol-last": 2,
     "func-names": 0,
     "func-style": 0,
-    "keyword-spacing": 2,
     "key-spacing": [
       2,
       {
