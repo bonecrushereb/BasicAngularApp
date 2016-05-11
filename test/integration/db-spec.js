@@ -3,7 +3,7 @@ describe('the angular app', function() {
     browser.get('http://localhost:5000');
 
     element(by.model('greeting')).sendKeys('hello world');
-    element(by.id('greeting')).getText().then(function(text) {
+    element(by.css('h1')).getText().then(function(text) {
 
       expect(text).toEqual('hello world');
     });

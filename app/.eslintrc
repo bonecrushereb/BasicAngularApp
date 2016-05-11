@@ -1,9 +1,10 @@
 {
   "env": {
-    "jasmine": true,
-    "protractor": true,
+    "jasmine": false,
+    "protractor": false,
     "browser": true,
-    "es6": false
+    "commonjs": true,
+    "es6": true
   },
   "globals": {
 
