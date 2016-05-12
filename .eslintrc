@@ -4,9 +4,6 @@
     "node": true,
     "es6": true
   },
-  "globals": {
-
-  },
   "rules": {
     "comma-dangle": 2,
     "no-cond-assign": 2,
@@ -130,7 +127,6 @@
     "eol-last": 2,
     "func-names": 0,
     "func-style": 0,
-    "keyword-spacing": 2,
     "key-spacing": [
       2,
       {
@@ -174,6 +170,7 @@
       "always"
     ],
     "sort-vars": 0,
+    "keyword-spacing": 2,
     "space-before-function-paren": [
       2,
       "never"
