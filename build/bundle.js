@@ -73,7 +73,9 @@
 	
 	  this.updateShark = (shark) => {
 	    $http.put(baseUrl + '/api/sharks' + shark._id, shark)
-	      .then(() => {
+	      .then((res) => {
+	        this.sharks.pop(res.data);
+	        this.shark.name = null;
 	        shark.editing = false;
 	      }, handleError.bind(this));
 	  };
