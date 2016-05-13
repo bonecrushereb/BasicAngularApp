@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SharksvsPrey</title>
+</head>
+<body data-ng-app="angApp">
+  <main data-ng-controller="SharksController as sharksctrl" data-ng-init="sharksctrl.getAll()">
+    <form data-ng-submit="sharksctrl.createShark()">
+      <label for="name">Name</label>
+      <input id="sharkName" type="text" name="name" data-ng-model="sharksctrl.newShark.name">
+
+      <label for="speed">Speed</label>
+      <input type="text" name="speed" data-ng-model="sharksctrl.newShark.speed">
+
+      <label for="preyPreference">prey preference</label>
+      <input type="text" name="preyPreference" data-ng-model="sharksctrl.newShark.preyPreference">
+
+      <button id="sharkcreate" type="submit">Create Shark</button>
+    </form>
+
+    <ul id="sharkslist">
+      <li data-ng-repeat="shark in sharksctrl.sharks">
+        <span data-ng-if="!shark.editing">{{shark.name}} is {{shark.speed || '60'}} fast who likes {{shark.preyPreference}}</span>
+        <form data-ng-if="shark.editing" data-ng-submit="sharksctrl.updateShark(shark)">
+          <label for="name">Name</label>
+          <input type="text" name="name" data-ng-model="shark.name">
+
+          <label for="speed">Speed</label>
+          <input type="text" name="speed" data-ng-model="shark.speed">
+
+          <label for="preyPreference">prey preference</label>
+          <input type="text" name="preyPreference" data-ng-model="shark.preyPreference">
+
+          <button type="submit">Update Shark</button>
+          <button data-ng-click="shark.editing = false">Cancel</button>
+        </form>
+
+        <button data-ng-if="!shark.editing" data-ng-click="shark.editing = true">Edit</button>
+        <button data-ng-click="sharksctrl.removeShark(shark)">Kill This Shark!</button>
+      </li>
+    </ul>
+  </main>
+<script src="./bundle.js"></script>
+</body>
+</html>
