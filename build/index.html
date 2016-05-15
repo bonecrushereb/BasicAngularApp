@@ -35,7 +35,7 @@
             <input type="text" name="preyPreference" data-ng-model="shark.preyPreference">
 
             <button id="updateShark" type="submit">Update Shark</button>
-            <button id="canceledit" data-ng-click="sharksctrl.cancelShark(shark)">Cancel</button>
+            <button id="sharkcanceledit" data-ng-click="sharksctrl.cancelShark(shark)">Cancel</button>
           </form>
 
           <button id="editshark" data-ng-if="!shark.editing" data-ng-click="sharksctrl.editShark(shark)">Edit</button>
@@ -67,7 +67,7 @@
             <input type="text" name="speed" data-ng-model="prey.speed">
 
             <button id="updatePrey" type="submit">Update Prey</button>
-            <button type="canceledit" data-ng-click="preysctrl.cancelPrey(prey)">Cancel</button>
+            <button id="preycanceledit" data-ng-click="preysctrl.cancelPrey(prey)">Cancel</button>
           </form>
 
           <button id="editprey" data-ng-if="!prey.editing" data-ng-click="preysctrl.editPrey(prey)">Edit</button>
