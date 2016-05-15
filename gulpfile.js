@@ -1,11 +1,11 @@
 const gulp = require('gulp');
 const eslint = require('gulp-eslint');
-const exec = require('child_process').exec;
+const fork = require('child_process').fork;
+const spawn = require('child_process').spawn;
 const protractor = require('gulp-protractor').protractor;
 const webpack = require('webpack-stream');
 
-
-const files = ['*.js', './app'];
+const files = ['*.js', './**/**/app'];
 
 gulp.task('webpack:dev', () => {
   gulp.src('app/js/entry.js')
@@ -23,6 +23,22 @@ gulp.task('webpack:dev', () => {
   .pipe(gulp.dest('./build'));
 });
 
+gulp.task('webpack:test', () => {
+  gulp.src('test/unit/test_entry.js')
+  .pipe(webpack({
+    devtool: 'source-map',
+    module: {
+      loaders: [
+        { test: /\.css$/, loader: 'style!css' }
+      ]
+    },
+    output: {
+      filename: 'bundle.js'
+    }
+  }))
+  .pipe(gulp.dest('./test'));
+});
+
 gulp.task('static:dev', ['webpack:dev'], () => {
   gulp.src('app/**/*.html')
   .pipe(gulp.dest('./build'));
@@ -34,14 +50,15 @@ gulp.task('lint:dev', () => {
   .pipe(eslint.format());
 });
 
-gulp.task('start:sever', ['static:dev'], () => {
-  exec('node server.js', () => {
-  });
-  exec('webdriver-manager start', () => {
-  });
+var children = [];
+gulp.task('start:server', ['static:dev'], () => {
+  children.push(fork('apiserver.js'));
+  children.push(fork('staticserver.js'));
+  children.push(spawn('mongod', ['--dbpath=./db']));
+  children.push(spawn('webdriver-manager', ['start']));
 });
 
-gulp.task('protractor', ['start:sever'], () => {
+gulp.task('protractor', ['start:server'], () => {
   return gulp.src('./src/tests/*.js')
     .pipe(protractor({
       configFile: 'test/integration/config.js',
@@ -52,6 +69,12 @@ gulp.task('protractor', ['start:sever'], () => {
     });
 });
 
+gulp.task('test', ['build:dev', 'lint:dev', 'protractor', 'start:server', 'webpack:test']);
+gulp.task('build:dev', ['webpack:dev', 'static:dev']);
+gulp.task('default', ['test', 'build:dev']);
 
-gulp.task('build:dev', ['lint:dev', 'webpack:dev', 'static:dev', 'start:sever', 'protractor']);
-gulp.task('default', ['build:dev']);
+process.on('exit', () => {
+  children.forEach((child) => {
+    child.kill('SIGINT');
+  });
+});

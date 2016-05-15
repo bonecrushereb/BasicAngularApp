@@ -2,6 +2,10 @@ body{
   background: blue;
 }
 
-h1 {
+h1, span, label {
   color: white;
+}
+
+li {
+  list-style-type: none;
 }
