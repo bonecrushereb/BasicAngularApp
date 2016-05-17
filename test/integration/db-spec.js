@@ -5,7 +5,7 @@ describe('then app', function() {
     element(by.model('sharksctrl.newShark.preyPreference')).sendKeys('tests');
     element(by.id('createShark')).click();
     element(by.css('#sharklist li:first-child')).getText(function(text) {
-      expect(text).toEqal('test shark is a shark with a speed of 60 who likes tests');
+      expect(text).toEqual('test shark is a shark with a speed of 60 who likes tests');
     });
   });
   it('should cancel an update of a shark', function() {
@@ -16,7 +16,7 @@ describe('then app', function() {
     element(by.model('shark.preyPreference')).clear().sendKeys('edited prey');
     element(by.id('sharkcanceledit')).click();
     element(by.css('#sharklist li:first-child')).getText(function(text) {
-      expect(text).toEqal('test shark is a shark with a speed of 60 who likes tests');
+      expect(text).toEqual('test shark is a shark with a speed of 60 who likes tests');
     });
   });
   it('should update a shark', function() {
@@ -28,14 +28,14 @@ describe('then app', function() {
     element(by.id('updateShark')).click();
     element(by.css('#sharklist li:first-child')).getText(function(text) {
       expect(text)
-      .toEqal('edited shark is a shark with a speed of edited speed who likes edited prey');
+      .toEqual('edited shark is a shark with a speed of edited speed who likes edited prey');
     });
   });
   it('should delete a shark', function() {
     browser.get('http://localhost:5000');
     element(by.css('#sharklist li:first-child')).element(by.id('deleteshark')).click();
     element(by.css('#sharklist')).getText(function(text) {
-      expect(text).toEql(null);
+      expect(text).toEqual(null);
     });
   });
   it('should create a prey', function() {
@@ -44,7 +44,7 @@ describe('then app', function() {
     element(by.model('preysctrl.newPrey.speed')).sendKeys('test speed');
     element(by.id('createPrey')).click();
     element(by.css('#preylist li:first-child')).getText(function(text) {
-      expect(text).toEqal('test prey has a speed of test speed');
+      expect(text).toEqual('test prey has a speed of test speed');
     });
   });
   it('should cancel an update of a prey', function() {
@@ -54,7 +54,7 @@ describe('then app', function() {
     element(by.model('prey.speed')).clear().sendKeys('edited speed');
     element(by.id('preycanceledit')).click();
     element(by.css('#preylist li:first-child')).getText(function(text) {
-      expect(text).toEqal('test prey has a speed of test speed');
+      expect(text).toEqual('test prey has a speed of test speed');
     });
   });
   it('should update a prey', function() {
@@ -65,14 +65,14 @@ describe('then app', function() {
     element(by.id('updatePrey')).click();
     element(by.css('#preylist li:first-child')).getText(function(text) {
       expect(text)
-      .toEqal('edited prey has a speed of edited speed');
+      .toEqual('edited prey has a speed of edited speed');
     });
   });
   it('should kill a prey', function() {
     browser.get('http://localhost:5000');
     element(by.css('#preylist li:first-child')).element(by.id('deleteprey')).click();
     element(by.css('#preylist')).getText(function(text) {
-      expect(text).toEql(null);
+      expect(text).toEqual(null);
     });
   });
 });

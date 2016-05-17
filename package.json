@@ -1,5 +1,5 @@
 {
-  "name": "restAPI",
+  "name": "basic_angular_app",
   "version": "1.0.0",
   "description": "A basic angular app using a 2 resource rest API",
   "main": "server.js",
