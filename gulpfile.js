@@ -4,6 +4,7 @@ const fork = require('child_process').fork;
 const spawn = require('child_process').spawn;
 const protractor = require('gulp-protractor').protractor;
 const webpack = require('webpack-stream');
+process.env.PORT = 5555;
 
 const files = ['*.js', './**/**/app'];
 

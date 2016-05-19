@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "node_modules/gulp/bin/gulp",
-    "start": "node server.js"
+    "start": "node apiserver.js"
   },
   "keywords": [],
   "author": "bonecrushereb@gmail.com",
