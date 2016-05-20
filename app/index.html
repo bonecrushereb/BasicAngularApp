@@ -7,9 +7,9 @@
 <body data-ng-app="angApp">
   <main>
 
-    <section data-ng-controller="SharksController as sharksctrl" data-ng-init="sharksctrl.getAll()">
+    <section class="shark" data-ng-controller="SharksController as sharksctrl" data-ng-init="sharksctrl.getAll()">
       <h1>Shark:</h1>
-      <shark-form
+      <shark-form class = "btn-{{update}}"
         data-button-text="Create Shark!"
         data-action="create"
         data-shark="sharksctrl.newShark">
@@ -23,13 +23,13 @@
             data-button-text="Update Shark"
             data-action="update"
             data-shark="shark">
-            <buttonid data-ng-click="shark.editing = false">Cancel</button>
+            <button class="btn-cancel" data-ng-click="shark.editing = false">Cancel</button>
           </shark-form>
         </shark-list-item>
       </ul>
     </section>
 
-    <section data-ng-controller="PreysController as preysctrl" data-ng-init="preysctrl.getAll()">
+    <section class="prey" data-ng-controller="PreysController as preysctrl" data-ng-init="preysctrl.getAll()">
       <h1>Prey:</h1>
       <prey-form
         data-button-text="Create Prey!"
@@ -45,7 +45,7 @@
             data-button-text="Update Prey"
             data-action="update"
             data-prey="prey">
-            <button data-ng-click="prey.editing = false">Cancel</button>
+            <button class="btn-cancel" data-ng-click="prey.editing = false">Cancel</button>
           </shark-form>
         </prey-list-item>
       </ul>
