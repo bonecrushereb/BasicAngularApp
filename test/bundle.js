@@ -45,8 +45,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(8);
-	__webpack_require__(10);
+	__webpack_require__(24);
+	__webpack_require__(26);
 
 
 /***/ },
@@ -56,105 +56,9 @@
 	const angular = __webpack_require__(2);
 	__webpack_require__(4);
 	const angApp = angular.module('angApp', []);
-	const baseUrl = 'http://localhost:5555';
 	
-	var handleError = function(error) {
-	  console.log(error);
-	  this.errors = (this.errors || []).push(error);
-	};
-	
-	var deeplyclone = function(obj) {
-	  return JSON.parse(JSON.stringify(obj));
-	};
-	
-	angApp.controller('SharksController', ['$http', function($http) {
-	  this.sharks = [];
-	  this.original = {};
-	  this.getAll = () => {
-	    $http.get(baseUrl + '/api/sharks', this.newShark)
-	      .then((res) => {
-	        this.sharks = res.data;
-	      }, handleError.bind(this));
-	  };
-	
-	  this.createShark = () => {
-	    $http.post(baseUrl + '/api/sharks', this.newShark)
-	      .then((res) => {
-	        this.sharks.push(res.data);
-	        this.newShark = null;
-	      }, handleError.bind(this));
-	  };
-	
-	  this.editShark = (shark) => {
-	    shark.editing = true;
-	    this.original = deeplyclone(shark);
-	  };
-	
-	  this.cancelShark = (shark) => {
-	    shark.editing = false;
-	    shark.name = this.original.name;
-	    shark.speed = this.original.speed;
-	    shark.preyPreference = this.original.preyPreference;
-	  };
-	
-	  this.updateShark = (shark) => {
-	    $http.put(baseUrl + '/api/sharks/' + shark._id, shark)
-	      .then(() => {
-	        shark.editing = false;
-	      }, handleError.bind(this));
-	  };
-	
-	  this.removeShark = (shark) => {
-	    $http.delete(baseUrl + '/api/sharks/' + shark._id)
-	      .then(() => {
-	        this.sharks.splice(this.sharks.indexOf(shark), 1);
-	      }, handleError.bind(this));
-	  };
-	}]);
-	
-	angApp.controller('PreysController', ['$http', function($http) {
-	  this.preys = [];
-	  this.original = {};
-	  this.getAll = () => {
-	    $http.get(baseUrl + '/api/preys', this.newPrey)
-	      .then((res) => {
-	        this.preys = res.data;
-	      }, handleError.bind(this));
-	  };
-	
-	  this.createPrey = () => {
-	    $http.post(baseUrl + '/api/preys', this.newPrey)
-	      .then((res) => {
-	        this.preys.push(res.data);
-	        this.newPrey = null;
-	      }, handleError.bind(this));
-	  };
-	
-	  this.editPrey = (prey) => {
-	    prey.editing = true;
-	    this.original = deeplyclone(prey);
-	  };
-	
-	  this.cancelPrey = (prey) => {
-	    prey.editing = false;
-	    prey.name = this.original.name;
-	    prey.speed = this.original.speed;
-	  };
-	
-	  this.updatePrey = (prey) => {
-	    $http.put(baseUrl + '/api/preys/' + prey._id, prey)
-	      .then(() => {
-	        prey.editing = false;
-	      }, handleError.bind(this));
-	  };
-	
-	  this.removePrey = (prey) => {
-	    $http.delete(baseUrl + '/api/preys/' + prey._id)
-	      .then(() => {
-	        this.preys.splice(this.preys.indexOf(prey), 1);
-	      }, handleError.bind(this));
-	  };
-	}]);
+	__webpack_require__(8)(angApp);
+	__webpack_require__(18)(angApp);
 
 
 /***/ },
@@ -31390,8 +31294,319 @@
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = function(app) {
+	  __webpack_require__(9)(app);
+	  __webpack_require__(15)(app);
+	};
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+	  __webpack_require__(10)(app);
+	};
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var handleError = __webpack_require__(11).handleError;
+	var baseUrl = __webpack_require__(14).baseUrl;
+	var deeplyClone = __webpack_require__(11).deeplyClone;
+	
+	module.exports = function(app) {
+	
+	  app.controller('SharksController', ['$http', function($http) {
+	    this.sharks = [];
+	    this.original = {};
+	    this.getAll = () => {
+	      $http.get(baseUrl + '/api/sharks', this.newShark)
+	        .then((res) => {
+	          this.sharks = res.data;
+	        }, handleError.bind(this));
+	    };
+	
+	    this.createShark = () => {
+	      $http.post(baseUrl + '/api/sharks', this.newShark)
+	        .then((res) => {
+	          this.sharks.push(res.data);
+	          this.newShark = null;
+	        }, handleError.bind(this));
+	    };
+	
+	    this.editShark = (shark) => {
+	      shark.editing = true;
+	      this.original = deeplyclone(shark);
+	    };
+	
+	    this.cancelShark = (shark) => {
+	      shark.editing = false;
+	      shark.name = this.original.name;
+	      shark.speed = this.original.speed;
+	      shark.preyPreference = this.original.preyPreference;
+	    };
+	
+	    this.updateShark = (shark) => {
+	      $http.put(baseUrl + '/api/sharks/' + shark._id, shark)
+	        .then(() => {
+	          shark.editing = false;
+	        }, handleError.bind(this));
+	    };
+	
+	    this.removeShark = (shark) => {
+	      $http.delete(baseUrl + '/api/sharks/' + shark._id)
+	        .then(() => {
+	          this.sharks.splice(this.sharks.indexOf(shark), 1);
+	        }, handleError.bind(this));
+	    };
+	  }]);
+	};
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = {
+	  handleError: __webpack_require__(12),
+	  deeplyClone: __webpack_require__(13)
+	};
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	module.exports = function(error) {
+	  console.log(error);
+	  this.errors = (this.errors || []).push(error);
+	};
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	module.exports = function(obj) {
+	  return JSON.parse(JSON.stringify(obj));
+	};
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  baseUrl: 'http://localhost:5555'
+	};
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+	  __webpack_require__(16)(app);
+	  __webpack_require__(17)(app);
+	};
+
+
+/***/ },
+/* 16 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.directive('sharkListItem', function() {
+	    return {
+	      restrict: 'EAC',
+	      replace: true,
+	      require: '^ngController',
+	      transclude: true,
+	      templateUrl: 'templates/sharks/directives/shark_list_item.html',
+	      scope: {
+	        shark: '='
+	      },
+	      link: function(scope, element, attrs, controller) {
+	        scope.remove = controller.removeShark;
+	      }
+	    };
+	  });
+	};
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.directive('sharkForm', function() {
+	    return {
+	      restrict: 'EAC',
+	      require: '^ngController',
+	      transclude: true,
+	      templateUrl: '/templates/sharks/directives/shark_form.html',
+	      scope: {
+	        shark: '=',
+	        buttonText: '@',
+	        action: '@'
+	      },
+	      link: function(scope, element, attrs, controller) {
+	        var actions = {
+	          update: controller.updateShark,
+	          create: controller.createShark
+	        };
+	        scope.save = actions[scope.action];
+	      }
+	    };
+	  });
+	};
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+	  __webpack_require__(19)(app);
+	  __webpack_require__(21)(app);
+	};
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+	  __webpack_require__(20)(app);
+	};
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var handleError = __webpack_require__(11).handleError;
+	var baseUrl = __webpack_require__(14).baseUrl;
+	var deeplyClone = __webpack_require__(11).deeplyClone;
+	
+	module.exports = function(app) {
+	
+	  app.controller('PreysController', ['$http', function($http) {
+	  this.preys = [];
+	  this.original = {};
+	  this.getAll = () => {
+	    $http.get(baseUrl + '/api/preys', this.newPrey)
+	      .then((res) => {
+	        this.preys = res.data;
+	      }, handleError.bind(this));
+	  };
+	
+	  this.createPrey = () => {
+	    $http.post(baseUrl + '/api/preys', this.newPrey)
+	      .then((res) => {
+	        this.preys.push(res.data);
+	        this.newPrey = null;
+	      }, handleError.bind(this));
+	  };
+	
+	  this.editPrey = (prey) => {
+	    prey.editing = true;
+	    this.original = deeplyclone(prey);
+	  };
+	
+	  this.cancelPrey = (prey) => {
+	    prey.editing = false;
+	    prey.name = this.original.name;
+	    prey.speed = this.original.speed;
+	  };
+	
+	  this.updatePrey = (prey) => {
+	    $http.put(baseUrl + '/api/preys/' + prey._id, prey)
+	      .then(() => {
+	        prey.editing = false;
+	      }, handleError.bind(this));
+	  };
+	
+	  this.removePrey = (prey) => {
+	    $http.delete(baseUrl + '/api/preys/' + prey._id)
+	      .then(() => {
+	        this.preys.splice(this.preys.indexOf(prey), 1);
+	      }, handleError.bind(this));
+	  };
+	}]);
+	}
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+	  __webpack_require__(22)(app);
+	  __webpack_require__(23)(app);
+	};
+
+
+/***/ },
+/* 22 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.directive('preyListItem', function() {
+	    return {
+	      restrict: 'EAC',
+	      replace: true,
+	      require: '^ngController',
+	      transclude: true,
+	      templateUrl: 'templates/preys/directives/prey_list_item.html',
+	      scope: {
+	        prey: '='
+	      },
+	      link: function(scope, element, attrs, controller) {
+	        scope.remove = controller.removePrey;
+	      }
+	    };
+	  });
+	};
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.directive('preyForm', function() {
+	    return {
+	      restrict: 'EAC',
+	      require: '^ngController',
+	      transclude: true,
+	      templateUrl: '/templates/preys/directives/prey_form.html',
+	      scope: {
+	        prey: '=',
+	        buttonText: '@',
+	        action: '@'
+	      },
+	      link: function(scope, element, attrs, controller) {
+	        var actions = {
+	          update: controller.updatePrey,
+	          create: controller.createPrey
+	        };
+	        scope.save = actions[scope.action];
+	      }
+	    };
+	  });
+	};
+
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var angular = __webpack_require__(2);
-	__webpack_require__(9);
+	__webpack_require__(25);
 	
 	describe('sharks controller', function() {
 	  var $controller;
@@ -31464,7 +31679,7 @@
 
 
 /***/ },
-/* 9 */
+/* 25 */
 /***/ function(module, exports) {
 
 	/**
@@ -34476,11 +34691,11 @@
 
 
 /***/ },
-/* 10 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var angular = __webpack_require__(2);
-	__webpack_require__(9);
+	__webpack_require__(25);
 	
 	describe('preys controller', function() {
 	  var $controller;

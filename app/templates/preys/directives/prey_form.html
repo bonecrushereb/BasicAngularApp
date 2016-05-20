@@ -1,0 +1,11 @@
+<form data-ng-submit="save(prey)">
+  <label for="name">Name</label>
+  <input type="text" name="name" data-ng-model="prey.name">
+
+  <label for="speed">Speed</label>
+  <input type="text" name="speed" data-ng-model="prey.speed"
+  placeholder="60">
+
+  <button type="submit">{{buttonText}}</button>
+  <ng-transclude></ng-transclude>
+</form>
