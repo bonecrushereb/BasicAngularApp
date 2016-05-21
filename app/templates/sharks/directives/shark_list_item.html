@@ -1,6 +1,6 @@
 <li>
   <ng-transclude></ng-transclude>
   <span data-ng-if="!shark.editing">{{shark.name}} has a speed of {{shark.speed || '60'}} and likes {{shark.preyPreference}}</span>
-  <button class="btn-edit" data-ng-if="!shark.editing" data-ng-click="shark.editing = true">Edit</button>
-  <button class="btn-delete" data-ng-click="remove(shark)">Delete</button>
+  <button data-ng-if="!shark.editing" data-ng-click="shark.editing = true">Edit</button>
+  <button data-ng-click="remove(shark)">Delete</button>
 </li>

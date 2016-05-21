@@ -7,30 +7,31 @@
 <body data-ng-app="angApp">
   <main>
 
-    <section class="shark" data-ng-controller="SharksController as sharksctrl" data-ng-init="sharksctrl.getAll()">
-      <h1>Shark:</h1>
-      <shark-form class = "btn-{{update}}"
+    <h1>Shark:</h1>
+    <section data-ng-controller="SharksController as sharksctrl" data-ng-init="sharksctrl.getAll()">
+
+      <shark-form
         data-button-text="Create Shark!"
         data-action="create"
         data-shark="sharksctrl.newShark">
       </shark-form>
 
       <ul id="sharklist">
-        <shark-list-item data-ng-repeat="shark in sharksctrl.sharks"
-        data-shark="shark">
+        <shark-list-item data-ng-repeat="shark in sharksctrl.sharks" data-shark="shark">
           <shark-form
             data-ng-if="shark.editing"
             data-button-text="Update Shark"
             data-action="update"
             data-shark="shark">
-            <button class="btn-cancel" data-ng-click="shark.editing = false">Cancel</button>
+            <button data-ng-click="shark.editing = false">Cancel</button>
           </shark-form>
         </shark-list-item>
       </ul>
     </section>
 
-    <section class="prey" data-ng-controller="PreysController as preysctrl" data-ng-init="preysctrl.getAll()">
-      <h1>Prey:</h1>
+    <h1>Prey:</h1>
+    <section data-ng-controller="PreysController as sharksctrl" data-ng-init="preysctrl.getAll()">
+
       <prey-form
         data-button-text="Create Prey!"
         data-action="create"
@@ -38,15 +39,14 @@
       </prey-form>
 
       <ul id="preylist">
-        <prey-list-item data-ng-repeat="prey in preysctrl.preys"
-        data-prey="prey">
+        <prey-list-item data-ng-repeat="prey in preysctrl.preys" data-prey="prey">
           <prey-form
             data-ng-if="prey.editing"
             data-button-text="Update Prey"
             data-action="update"
             data-prey="prey">
-            <button class="btn-cancel" data-ng-click="prey.editing = false">Cancel</button>
-          </shark-form>
+            <button data-ng-click="prey.editing = false">Cancel</button>
+          </prey-form>
         </prey-list-item>
       </ul>
     </section>

@@ -3,17 +3,18 @@ var baseUrl = require('../../config').baseUrl;
 const copy = require('angular').copy;
 
 module.exports = function(app) {
-
   app.controller('SharksController', ['$http', function($http) {
     this.sharks = [];
-    this.getAll = () => {
-      $http.get(baseUrl + '/api/sharks', this.newShark)
+    this.getAll = function() {
+      $http.get(baseUrl + '/api/sharks')
         .then((res) => {
           this.sharks = res.data;
+          console.log(this.sharks);
         }, handleError.bind(this));
     };
 
     this.createShark = () => {
+      console.log('hello from create shark');
       $http.post(baseUrl + '/api/sharks', this.newShark)
         .then((res) => {
           this.sharks.push(res.data);
@@ -34,7 +35,7 @@ module.exports = function(app) {
          }
     };
 
-    this.updateShark = (shark) => {
+    this.updateShark = (shark) =>{
       $http.put(baseUrl + '/api/sharks/' + shark._id, shark)
         .then(() => {
           shark.editing = false;
