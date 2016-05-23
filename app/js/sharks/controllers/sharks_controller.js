@@ -1,20 +1,20 @@
+const angular = require('angular');
 var handleError = require('../../lib').handleError;
 var baseUrl = require('../../config').baseUrl;
-const copy = require('angular').copy;
 
 module.exports = function(app) {
+
   app.controller('SharksController', ['$http', function($http) {
     this.sharks = [];
+
     this.getAll = function() {
       $http.get(baseUrl + '/api/sharks')
         .then((res) => {
           this.sharks = res.data;
-          console.log(this.sharks);
         }, handleError.bind(this));
     };
 
     this.createShark = () => {
-      console.log('hello from create shark');
       $http.post(baseUrl + '/api/sharks', this.newShark)
         .then((res) => {
           this.sharks.push(res.data);
@@ -24,15 +24,16 @@ module.exports = function(app) {
 
     this.editShark = (shark) => {
       shark.editing = true;
-      this.original = copy(shark);
-      console.log('shark', this.original);
+      this.original = angular.copy(shark);
     };
 
     this.cancelShark = (shark) => {
       shark.editing = false;
       for (var key in this.original) {
+        if(this.original.hasOwnProperty(key)) {
            shark[key] = this.original[key];
          }
+      }
     };
 
     this.updateShark = (shark) =>{

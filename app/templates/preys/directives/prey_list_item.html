@@ -1,6 +1,6 @@
 <li>
   <ng-transclude></ng-transclude>
   <span data-ng-if="!prey.editing">{{prey.name}} has a speed of {{prey.speed}}</span>
-  <button class="btn-edit" data-ng-if="!prey.editing" data-ng-click="prey.editing = true">Edit</button>
-  <button class="btn-delete" data-ng-click="remove(prey)">Delete</button>
+  <button class="btn-edit" data-ng-if="!prey.editing" data-ng-click="edit(prey)">Edit</button>
+  <button class="btn-delete"  data-ng-click="remove(prey)">Delete</button>
 </li>

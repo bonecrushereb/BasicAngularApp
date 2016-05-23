@@ -1,19 +1,20 @@
+const angular = require('angular');
 var handleError = require('../../lib').handleError;
 var baseUrl = require('../../config').baseUrl;
-const copy = require('angular').copy;
 
 module.exports = function(app) {
 
   app.controller('PreysController', ['$http', function($http) {
     this.preys = [];
+
     this.getAll = function() {
-      $http.get(baseUrl + '/api/preys', this.newPrey)
+      $http.get(baseUrl + '/api/preys')
         .then((res) => {
           this.preys = res.data;
         }, handleError.bind(this));
     };
 
-    this.createPrey = function() {
+    this.createPrey = () => {
       $http.post(baseUrl + '/api/preys', this.newPrey)
         .then((res) => {
           this.preys.push(res.data);
@@ -21,27 +22,28 @@ module.exports = function(app) {
         }, handleError.bind(this));
     };
 
-    this.editPrey = function(prey) {
+    this.editPrey = (prey) => {
       prey.editing = true;
-      this.original = copy(prey);
-      console.log('prey', this.original)
+      this.original = angular.copy(prey);
     };
 
-    this.cancelPrey = function(prey) {
+    this.cancelPrey = (prey) => {
       prey.editing = false;
       for (var key in this.original) {
+        if(this.original.hasOwnProperty(key)) {
            prey[key] = this.original[key];
          }
+       }
     };
 
-    this.updatePrey = function(prey) {
+    this.updatePrey = (prey) => {
       $http.put(baseUrl + '/api/preys/' + prey._id, prey)
         .then(() => {
           prey.editing = false;
         }, handleError.bind(this));
     };
 
-    this.removePrey = function(prey) {
+    this.removePrey = (prey) => {
       $http.delete(baseUrl + '/api/preys/' + prey._id)
         .then(() => {
           this.preys.splice(this.preys.indexOf(prey), 1);
