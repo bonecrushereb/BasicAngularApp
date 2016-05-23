@@ -1,14 +1,14 @@
+const angular = require('angular');
 var handleError = require('../../lib').handleError;
 var baseUrl = require('../../config').baseUrl;
-var deeplyClone = require('../../lib').deeplyClone;
 
 module.exports = function(app) {
 
   app.controller('SharksController', ['$http', function($http) {
     this.sharks = [];
-    this.original = {};
-    this.getAll = () => {
-      $http.get(baseUrl + '/api/sharks', this.newShark)
+
+    this.getAll = function() {
+      $http.get(baseUrl + '/api/sharks')
         .then((res) => {
           this.sharks = res.data;
         }, handleError.bind(this));
@@ -24,17 +24,19 @@ module.exports = function(app) {
 
     this.editShark = (shark) => {
       shark.editing = true;
-      this.original = deeplyclone(shark);
+      this.original = angular.copy(shark);
     };
 
     this.cancelShark = (shark) => {
       shark.editing = false;
-      shark.name = this.original.name;
-      shark.speed = this.original.speed;
-      shark.preyPreference = this.original.preyPreference;
+      for (var key in this.original) {
+        if(this.original.hasOwnProperty(key)) {
+           shark[key] = this.original[key];
+         }
+      }
     };
 
-    this.updateShark = (shark) => {
+    this.updateShark = (shark) =>{
       $http.put(baseUrl + '/api/sharks/' + shark._id, shark)
         .then(() => {
           shark.editing = false;

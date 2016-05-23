@@ -6,75 +6,49 @@
 </head>
 <body data-ng-app="angApp">
   <main>
-    <h1>Sharks:</h1>
-    <section data-ng-controller="SharksController as sharksctrl" data-ng-init="sharksctrl.getAll()">
-      <form data-ng-submit="sharksctrl.createShark()">
-        <label for="name">Name</label>
-        <input id="sharkName" type="text" name="name" data-ng-model="sharksctrl.newShark.name">
 
-        <label for="speed">Speed</label>
-        <input type="text" name="speed" data-ng-model="sharksctrl.newShark.speed">
-
-        <label for="preyPreference">prey preference</label>
-        <input type="text" name="preyPreference" data-ng-model="sharksctrl.newShark.preyPreference">
-
-        <button id="createShark" type="submit">Create Shark</button>
-      </form>
+    <section class="shark" data-ng-controller="SharksController as sharksctrl" data-ng-init="sharksctrl.getAll()">
+      <h1>Shark:</h1>
+      <shark-form
+        data-button-text="Create Shark!"
+        data-action="create"
+        data-shark="sharksctrl.newShark">
+      </shark-form>
 
       <ul id="sharklist">
-        <li data-ng-repeat="shark in sharksctrl.sharks">
-          <span data-ng-if="!shark.editing">{{shark.name}} has a speed of {{shark.speed || '60'}} and likes {{shark.preyPreference}}</span>
-          <form data-ng-if="shark.editing" data-ng-submit="sharksctrl.updateShark(shark)">
-            <label for="name">Name</label>
-            <input type="text" name="name" data-ng-model="shark.name">
-
-            <label for="speed">Speed</label>
-            <input type="text" name="speed" data-ng-model="shark.speed">
-
-            <label for="preyPreference">prey preference</label>
-            <input type="text" name="preyPreference" data-ng-model="shark.preyPreference">
-
-            <button id="updateShark" type="submit">Update Shark</button>
-            <button id="sharkcanceledit" data-ng-click="sharksctrl.cancelShark(shark)">Cancel</button>
-          </form>
-
-          <button id="editshark" data-ng-if="!shark.editing" data-ng-click="sharksctrl.editShark(shark)">Edit</button>
-          <button id="deleteshark" data-ng-click="sharksctrl.removeShark(shark)">Kill This Shark!</button>
-        </li>
+        <shark-list-item data-ng-repeat="shark in sharksctrl.sharks" data-shark="shark">
+          <shark-form
+            data-ng-if="shark.editing"
+            data-button-text="Update Shark"
+            data-action="update"
+            data-shark="shark">
+            <button class="btn-cancel" data-ng-click="sharksctrl.cancelShark(shark)">Cancel</button>
+          </shark-form>
+        </shark-list-item>
       </ul>
     </section>
 
-    <h1>Preys:</h1>
-    <section data-ng-controller="PreysController as preysctrl" data-ng-init="preysctrl.getAll()">
-      <form data-ng-submit="preysctrl.createPrey()">
-        <label for="name">Name</label>
-        <input type="text" name="name" data-ng-model="preysctrl.newPrey.name">
-
-        <label for="speed">Speed</label>
-        <input type="text" name="speed" data-ng-model="preysctrl.newPrey.speed">
-
-        <button id="createPrey" type="submit">Create Prey</button>
-      </form>
+    <section class ="prey" data-ng-controller="PreysController as preysctrl" data-ng-init="preysctrl.getAll()">
+      <h1>Prey:</h1>
+      <prey-form
+        data-button-text="Create Prey!"
+        data-action="create"
+        data-prey="preysctrl.newPrey">
+      </prey-form>
 
       <ul id="preylist">
-        <li data-ng-repeat="prey in preysctrl.preys">
-          <span data-ng-if="!prey.editing">{{prey.name}} has a speed of {{prey.speed}}</span>
-          <form data-ng-if="prey.editing" data-ng-submit="preysctrl.updatePrey(prey)">
-            <label for="name">Name</label>
-            <input type="text" name="name" data-ng-model="prey.name">
-
-            <label for="speed">Speed</label>
-            <input type="text" name="speed" data-ng-model="prey.speed">
-
-            <button id="updatePrey" type="submit">Update Prey</button>
-            <button id="preycanceledit" data-ng-click="preysctrl.cancelPrey(prey)">Cancel</button>
-          </form>
-
-          <button id="editprey" data-ng-if="!prey.editing" data-ng-click="preysctrl.editPrey(prey)">Edit</button>
-          <button id="deleteprey" data-ng-click="preysctrl.removePrey(prey)">Kill the Prey!</button>
-        </li>
+        <prey-list-item data-ng-repeat="prey in preysctrl.preys" data-prey="prey">
+          <prey-form
+            data-ng-if="prey.editing"
+            data-button-text="Update Prey"
+            data-action="update"
+            data-prey="prey">
+            <button class="btn-cancel" data-ng-click="preysctrl.cancelPrey(prey)">Cancel</button>
+          </prey-form>
+        </prey-list-item>
       </ul>
     </section>
+
   </main>
 <script src="./bundle.js"></script>
 </body>

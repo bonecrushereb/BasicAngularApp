@@ -1,7 +1,13 @@
-body{
+body {
   background: blue;
 }
-
+section {
+  text-align: center;
+  margin: 5px;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 25px;
+}
 h1, span, label {
   color: white;
 }

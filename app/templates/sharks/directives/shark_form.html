@@ -1,0 +1,13 @@
+<form data-ng-submit="save(shark)">
+  <label for="name">Name</label>
+  <input type="text" name="name" data-ng-model="shark.name">
+
+  <label for="speed">Speed</label>
+  <input type="text" name="speed" data-ng-model="shark.speed" placeholder="60">
+
+  <label for="preyPreference">Prey Preference</label>
+  <input type="text" name="preyPreference" data-ng-model="shark.preyPreference" placeholder="fish">
+
+  <button class="btn-{{action}}" type="submit">{{buttonText}}</button>
+  <ng-transclude></ng-transclude>
+</form>
