@@ -7,9 +7,8 @@
 <body data-ng-app="angApp">
   <main>
 
-    <h1>Shark:</h1>
     <section class="shark" data-ng-controller="SharksController as sharksctrl" data-ng-init="sharksctrl.getAll()">
-
+      <h1>Shark:</h1>
       <shark-form
         data-button-text="Create Shark!"
         data-action="create"
@@ -29,9 +28,8 @@
       </ul>
     </section>
 
-    <h1>Prey:</h1>
     <section class ="prey" data-ng-controller="PreysController as preysctrl" data-ng-init="preysctrl.getAll()">
-
+      <h1>Prey:</h1>
       <prey-form
         data-button-text="Create Prey!"
         data-action="create"
