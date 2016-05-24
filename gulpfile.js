@@ -1,5 +1,8 @@
 const gulp = require('gulp');
 const eslint = require('gulp-eslint');
+const sass = require('gulp-sass');
+const maps = require('gulp-sourcemaps');
+const minifyCss = require('gulp-minify-css');
 const fork = require('child_process').fork;
 const spawn = require('child_process').spawn;
 const protractor = require('gulp-protractor').protractor;
@@ -8,15 +11,19 @@ process.env.PORT = 5555;
 
 const files = ['*.js', './**/**/app'];
 
+gulp.task('sass:dev', () => {
+  gulp.src('./app/**/*.scss')
+  .pipe(maps.init())
+  .pipe(sass().on('error', sass.logError))
+  .pipe(minifyCss())
+  .pipe(maps.write('./'))
+  .pipe(gulp.dest('./build'));
+});
+
 gulp.task('webpack:dev', () => {
   gulp.src('app/js/entry.js')
   .pipe(webpack({
     devtool: 'source-map',
-    module: {
-      loaders: [
-        { test: /\.css$/, loader: 'style!css' }
-      ]
-    },
     output: {
       filename: 'bundle.js'
     }
@@ -28,11 +35,6 @@ gulp.task('webpack:test', () => {
   gulp.src('test/unit/test_entry.js')
   .pipe(webpack({
     devtool: 'source-map',
-    module: {
-      loaders: [
-        { test: /\.css$/, loader: 'style!css' }
-      ]
-    },
     output: {
       filename: 'bundle.js'
     }
@@ -70,9 +72,14 @@ gulp.task('protractor', ['start:server'], () => {
     });
 });
 
+
 gulp.task('test', ['build:dev', 'lint:dev', 'protractor', 'start:server', 'webpack:test']);
-gulp.task('build:dev', ['webpack:dev', 'static:dev']);
+gulp.task('build:dev', ['webpack:dev', 'static:dev', 'sass:dev']);
 gulp.task('default', ['test', 'build:dev']);
+
+gulp.task('sass:watch', ['sass:dev'], () => {
+  gulp.watch('./app/**/.scss');
+});
 
 process.on('exit', () => {
   children.forEach((child) => {
