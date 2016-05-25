@@ -1,0 +1,8 @@
+@mixin gradient-two-color {
+  background: #ff6b6b; /* Old browsers */
+  background: -moz-linear-gradient(top,  #ff6b6b 0%, #5df46c 99%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #ff6b6b 0%,#5df46c 99%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #ff6b6b 0%,#5df46c 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff6b6b', endColorstr='#5df46c',GradientType=0 ); /* IE6-9 */
+
+}
