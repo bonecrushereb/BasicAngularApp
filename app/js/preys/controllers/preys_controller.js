@@ -19,7 +19,7 @@ module.exports = function(app) {
         .then((res) => {
           this.preys.push(res.data);
           this.newPrey = null;
-        }, spHandleError(this.errors, 'could not create prey' + prey.name));
+        }, spHandleError(this.errors, 'could not create prey' + this.newPrey.name));
     }.bind(this);
 
     this.editPrey = (prey) => {
