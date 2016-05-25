@@ -19,7 +19,7 @@ module.exports = function(app) {
         .then((res) => {
           this.sharks.push(res.data);
           this.newShark = null;
-        }, spHandleError(this.errors, 'could not create shark' + shark.name));
+        }, spHandleError(this.errors, 'could not create shark' + this.newShark.name));
     }.bind(this);
 
     this.editShark = (shark) => {

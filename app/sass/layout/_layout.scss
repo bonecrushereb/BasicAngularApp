@@ -1,8 +1,23 @@
 section {
   @include gradient-two-color;
-  text-align: center;
   margin: 5px;
   padding: 10px;
   border: 2px solid black;
   border-radius: 25px;
+}
+
+h1{
+  text-align: justify;
+}
+
+.form {
+  position: relative;
+  left: 40px;
+}
+
+.item-list li {
+  position: relative;
+  left: 10%;
+  margin-top: 20px;
+  font-size: 1.25em;
 }

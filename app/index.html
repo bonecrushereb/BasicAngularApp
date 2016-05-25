@@ -11,15 +11,15 @@
     <section class="shark" data-ng-controller="SharksController as sharksctrl" data-ng-init="sharksctrl.getAll()">
       <h1>Shark:</h1>
       <ul id="sharkError">
-        <li data-ng-repeat="error in sharksctrl.errors">{{error.message}}<button data-ng-click="sharksctrl.errors.splice(sharksctrl.errors.indexOf(error), 1)">x</button></li>
+        <li class="error-message" data-ng-repeat="error in sharksctrl.errors">{{error.message}}<button data-ng-click="sharksctrl.errors.splice(sharksctrl.errors.indexOf(error), 1)">x</button></li>
       </ul>
-      <shark-form
+      <shark-form class="form"
         data-button-text="Create Shark!"
         data-action="create"
         data-shark="sharksctrl.newShark">
       </shark-form>
 
-      <ul id="sharklist">
+      <ul class="item-list" id="sharklist">
         <shark-list-item data-ng-repeat="shark in sharksctrl.sharks" data-shark="shark">
           <shark-form
             data-ng-if="shark.editing"
@@ -35,15 +35,15 @@
     <section class ="prey" data-ng-controller="PreysController as preysctrl" data-ng-init="preysctrl.getAll()">
       <h1>Prey:</h1>
       <ul id="preyError">
-        <li data-ng-repeat="error in preysctrl.errors">{{error.message}}<button data-ng-click="preysctrl.errors.splice(preysctrl.errors.indexOf(error), 1)">x</button></li>
+        <li class="error-message" data-ng-repeat="error in preysctrl.errors">{{error.message}}<button data-ng-click="preysctrl.errors.splice(preysctrl.errors.indexOf(error), 1)">x</button></li>
       </ul>
-      <prey-form
+      <prey-form class="form"
         data-button-text="Create Prey!"
         data-action="create"
         data-prey="preysctrl.newPrey">
       </prey-form>
 
-      <ul id="preylist">
+      <ul class="item-list" id="preylist">
         <prey-list-item data-ng-repeat="prey in preysctrl.preys" data-prey="prey">
           <prey-form
             data-ng-if="prey.editing"
