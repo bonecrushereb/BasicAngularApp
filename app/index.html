@@ -10,6 +10,9 @@
 
     <section class="shark" data-ng-controller="SharksController as sharksctrl" data-ng-init="sharksctrl.getAll()">
       <h1>Shark:</h1>
+      <ul id="sharkError">
+        <li data-ng-repeat="error in sharksctrl.errors">{{error.message}}<button data-ng-click="sharksctrl.errors.splice(sharksctrl.errors.indexOf(error), 1)">x</button></li>
+      </ul>
       <shark-form
         data-button-text="Create Shark!"
         data-action="create"
@@ -31,6 +34,9 @@
 
     <section class ="prey" data-ng-controller="PreysController as preysctrl" data-ng-init="preysctrl.getAll()">
       <h1>Prey:</h1>
+      <ul id="preyError">
+        <li data-ng-repeat="error in preysctrl.errors">{{error.message}}<button data-ng-click="preysctrl.errors.splice(preysctrl.errors.indexOf(error), 1)">x</button></li>
+      </ul>
       <prey-form
         data-button-text="Create Prey!"
         data-action="create"
