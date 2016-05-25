@@ -44,33 +44,26 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(1);
-	__webpack_require__(24);
-	__webpack_require__(26);
+	const angular = __webpack_require__(1);
+	__webpack_require__(3);
+	__webpack_require__(4);
+	__webpack_require__(20);
+	__webpack_require__(21);
+	__webpack_require__(22);
+	// require('./shark_directive_test');
+	// require('./prey_directive_test');
 
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const angular = __webpack_require__(2);
-	__webpack_require__(4);
-	const angApp = angular.module('angApp', []);
-	
-	__webpack_require__(8)(angApp);
-	__webpack_require__(18)(angApp);
-
-
-/***/ },
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(3);
+	__webpack_require__(2);
 	module.exports = angular;
 
 
 /***/ },
-/* 3 */
+/* 2 */
 /***/ function(module, exports) {
 
 	/**
@@ -30943,743 +30936,7 @@
 	!window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 
 /***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(5);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(7)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./style.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./style.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(6)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, "body{\n  background: blue;\n}\n\nh1, span, label {\n  color: white;\n}\n\nli {\n  list-style-type: none;\n}\n", ""]);
-	
-	// exports
-
-
-/***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	// css base code, injected by the css-loader
-	module.exports = function() {
-		var list = [];
-	
-		// return the list of modules as css string
-		list.toString = function toString() {
-			var result = [];
-			for(var i = 0; i < this.length; i++) {
-				var item = this[i];
-				if(item[2]) {
-					result.push("@media " + item[2] + "{" + item[1] + "}");
-				} else {
-					result.push(item[1]);
-				}
-			}
-			return result.join("");
-		};
-	
-		// import a list of modules into the list
-		list.i = function(modules, mediaQuery) {
-			if(typeof modules === "string")
-				modules = [[null, modules, ""]];
-			var alreadyImportedModules = {};
-			for(var i = 0; i < this.length; i++) {
-				var id = this[i][0];
-				if(typeof id === "number")
-					alreadyImportedModules[id] = true;
-			}
-			for(i = 0; i < modules.length; i++) {
-				var item = modules[i];
-				// skip already imported module
-				// this implementation is not 100% perfect for weird media query combinations
-				//  when a module is imported multiple times with different media queries.
-				//  I hope this will never occur (Hey this way we have smaller bundles)
-				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-					if(mediaQuery && !item[2]) {
-						item[2] = mediaQuery;
-					} else if(mediaQuery) {
-						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-					}
-					list.push(item);
-				}
-			}
-		};
-		return list;
-	};
-
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	var stylesInDom = {},
-		memoize = function(fn) {
-			var memo;
-			return function () {
-				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
-				return memo;
-			};
-		},
-		isOldIE = memoize(function() {
-			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
-		}),
-		getHeadElement = memoize(function () {
-			return document.head || document.getElementsByTagName("head")[0];
-		}),
-		singletonElement = null,
-		singletonCounter = 0,
-		styleElementsInsertedAtTop = [];
-	
-	module.exports = function(list, options) {
-		if(false) {
-			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
-		}
-	
-		options = options || {};
-		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-		// tags it will allow on a page
-		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
-	
-		// By default, add <style> tags to the bottom of <head>.
-		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
-	
-		var styles = listToStyles(list);
-		addStylesToDom(styles, options);
-	
-		return function update(newList) {
-			var mayRemove = [];
-			for(var i = 0; i < styles.length; i++) {
-				var item = styles[i];
-				var domStyle = stylesInDom[item.id];
-				domStyle.refs--;
-				mayRemove.push(domStyle);
-			}
-			if(newList) {
-				var newStyles = listToStyles(newList);
-				addStylesToDom(newStyles, options);
-			}
-			for(var i = 0; i < mayRemove.length; i++) {
-				var domStyle = mayRemove[i];
-				if(domStyle.refs === 0) {
-					for(var j = 0; j < domStyle.parts.length; j++)
-						domStyle.parts[j]();
-					delete stylesInDom[domStyle.id];
-				}
-			}
-		};
-	}
-	
-	function addStylesToDom(styles, options) {
-		for(var i = 0; i < styles.length; i++) {
-			var item = styles[i];
-			var domStyle = stylesInDom[item.id];
-			if(domStyle) {
-				domStyle.refs++;
-				for(var j = 0; j < domStyle.parts.length; j++) {
-					domStyle.parts[j](item.parts[j]);
-				}
-				for(; j < item.parts.length; j++) {
-					domStyle.parts.push(addStyle(item.parts[j], options));
-				}
-			} else {
-				var parts = [];
-				for(var j = 0; j < item.parts.length; j++) {
-					parts.push(addStyle(item.parts[j], options));
-				}
-				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
-			}
-		}
-	}
-	
-	function listToStyles(list) {
-		var styles = [];
-		var newStyles = {};
-		for(var i = 0; i < list.length; i++) {
-			var item = list[i];
-			var id = item[0];
-			var css = item[1];
-			var media = item[2];
-			var sourceMap = item[3];
-			var part = {css: css, media: media, sourceMap: sourceMap};
-			if(!newStyles[id])
-				styles.push(newStyles[id] = {id: id, parts: [part]});
-			else
-				newStyles[id].parts.push(part);
-		}
-		return styles;
-	}
-	
-	function insertStyleElement(options, styleElement) {
-		var head = getHeadElement();
-		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
-		if (options.insertAt === "top") {
-			if(!lastStyleElementInsertedAtTop) {
-				head.insertBefore(styleElement, head.firstChild);
-			} else if(lastStyleElementInsertedAtTop.nextSibling) {
-				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
-			} else {
-				head.appendChild(styleElement);
-			}
-			styleElementsInsertedAtTop.push(styleElement);
-		} else if (options.insertAt === "bottom") {
-			head.appendChild(styleElement);
-		} else {
-			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
-		}
-	}
-	
-	function removeStyleElement(styleElement) {
-		styleElement.parentNode.removeChild(styleElement);
-		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
-		if(idx >= 0) {
-			styleElementsInsertedAtTop.splice(idx, 1);
-		}
-	}
-	
-	function createStyleElement(options) {
-		var styleElement = document.createElement("style");
-		styleElement.type = "text/css";
-		insertStyleElement(options, styleElement);
-		return styleElement;
-	}
-	
-	function createLinkElement(options) {
-		var linkElement = document.createElement("link");
-		linkElement.rel = "stylesheet";
-		insertStyleElement(options, linkElement);
-		return linkElement;
-	}
-	
-	function addStyle(obj, options) {
-		var styleElement, update, remove;
-	
-		if (options.singleton) {
-			var styleIndex = singletonCounter++;
-			styleElement = singletonElement || (singletonElement = createStyleElement(options));
-			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
-			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
-		} else if(obj.sourceMap &&
-			typeof URL === "function" &&
-			typeof URL.createObjectURL === "function" &&
-			typeof URL.revokeObjectURL === "function" &&
-			typeof Blob === "function" &&
-			typeof btoa === "function") {
-			styleElement = createLinkElement(options);
-			update = updateLink.bind(null, styleElement);
-			remove = function() {
-				removeStyleElement(styleElement);
-				if(styleElement.href)
-					URL.revokeObjectURL(styleElement.href);
-			};
-		} else {
-			styleElement = createStyleElement(options);
-			update = applyToTag.bind(null, styleElement);
-			remove = function() {
-				removeStyleElement(styleElement);
-			};
-		}
-	
-		update(obj);
-	
-		return function updateStyle(newObj) {
-			if(newObj) {
-				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
-					return;
-				update(obj = newObj);
-			} else {
-				remove();
-			}
-		};
-	}
-	
-	var replaceText = (function () {
-		var textStore = [];
-	
-		return function (index, replacement) {
-			textStore[index] = replacement;
-			return textStore.filter(Boolean).join('\n');
-		};
-	})();
-	
-	function applyToSingletonTag(styleElement, index, remove, obj) {
-		var css = remove ? "" : obj.css;
-	
-		if (styleElement.styleSheet) {
-			styleElement.styleSheet.cssText = replaceText(index, css);
-		} else {
-			var cssNode = document.createTextNode(css);
-			var childNodes = styleElement.childNodes;
-			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
-			if (childNodes.length) {
-				styleElement.insertBefore(cssNode, childNodes[index]);
-			} else {
-				styleElement.appendChild(cssNode);
-			}
-		}
-	}
-	
-	function applyToTag(styleElement, obj) {
-		var css = obj.css;
-		var media = obj.media;
-	
-		if(media) {
-			styleElement.setAttribute("media", media)
-		}
-	
-		if(styleElement.styleSheet) {
-			styleElement.styleSheet.cssText = css;
-		} else {
-			while(styleElement.firstChild) {
-				styleElement.removeChild(styleElement.firstChild);
-			}
-			styleElement.appendChild(document.createTextNode(css));
-		}
-	}
-	
-	function updateLink(linkElement, obj) {
-		var css = obj.css;
-		var sourceMap = obj.sourceMap;
-	
-		if(sourceMap) {
-			// http://stackoverflow.com/a/26603875
-			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
-		}
-	
-		var blob = new Blob([css], { type: "text/css" });
-	
-		var oldSrc = linkElement.href;
-	
-		linkElement.href = URL.createObjectURL(blob);
-	
-		if(oldSrc)
-			URL.revokeObjectURL(oldSrc);
-	}
-
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(app) {
-	  __webpack_require__(9)(app);
-	  __webpack_require__(15)(app);
-	};
-
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(app) {
-	  __webpack_require__(10)(app);
-	};
-
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var handleError = __webpack_require__(11).handleError;
-	var baseUrl = __webpack_require__(14).baseUrl;
-	var deeplyClone = __webpack_require__(11).deeplyClone;
-	
-	module.exports = function(app) {
-	
-	  app.controller('SharksController', ['$http', function($http) {
-	    this.sharks = [];
-	    this.original = {};
-	    this.getAll = () => {
-	      $http.get(baseUrl + '/api/sharks', this.newShark)
-	        .then((res) => {
-	          this.sharks = res.data;
-	        }, handleError.bind(this));
-	    };
-	
-	    this.createShark = () => {
-	      $http.post(baseUrl + '/api/sharks', this.newShark)
-	        .then((res) => {
-	          this.sharks.push(res.data);
-	          this.newShark = null;
-	        }, handleError.bind(this));
-	    };
-	
-	    this.editShark = (shark) => {
-	      shark.editing = true;
-	      this.original = deeplyclone(shark);
-	    };
-	
-	    this.cancelShark = (shark) => {
-	      shark.editing = false;
-	      shark.name = this.original.name;
-	      shark.speed = this.original.speed;
-	      shark.preyPreference = this.original.preyPreference;
-	    };
-	
-	    this.updateShark = (shark) => {
-	      $http.put(baseUrl + '/api/sharks/' + shark._id, shark)
-	        .then(() => {
-	          shark.editing = false;
-	        }, handleError.bind(this));
-	    };
-	
-	    this.removeShark = (shark) => {
-	      $http.delete(baseUrl + '/api/sharks/' + shark._id)
-	        .then(() => {
-	          this.sharks.splice(this.sharks.indexOf(shark), 1);
-	        }, handleError.bind(this));
-	    };
-	  }]);
-	};
-
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = {
-	  handleError: __webpack_require__(12),
-	  deeplyClone: __webpack_require__(13)
-	};
-
-
-/***/ },
-/* 12 */
-/***/ function(module, exports) {
-
-	module.exports = function(error) {
-	  console.log(error);
-	  this.errors = (this.errors || []).push(error);
-	};
-
-
-/***/ },
-/* 13 */
-/***/ function(module, exports) {
-
-	module.exports = function(obj) {
-	  return JSON.parse(JSON.stringify(obj));
-	};
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	  baseUrl: 'http://localhost:5555'
-	};
-
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(app) {
-	  __webpack_require__(16)(app);
-	  __webpack_require__(17)(app);
-	};
-
-
-/***/ },
-/* 16 */
-/***/ function(module, exports) {
-
-	module.exports = function(app) {
-	  app.directive('sharkListItem', function() {
-	    return {
-	      restrict: 'EAC',
-	      replace: true,
-	      require: '^ngController',
-	      transclude: true,
-	      templateUrl: 'templates/sharks/directives/shark_list_item.html',
-	      scope: {
-	        shark: '='
-	      },
-	      link: function(scope, element, attrs, controller) {
-	        scope.remove = controller.removeShark;
-	      }
-	    };
-	  });
-	};
-
-
-/***/ },
-/* 17 */
-/***/ function(module, exports) {
-
-	module.exports = function(app) {
-	  app.directive('sharkForm', function() {
-	    return {
-	      restrict: 'EAC',
-	      require: '^ngController',
-	      transclude: true,
-	      templateUrl: '/templates/sharks/directives/shark_form.html',
-	      scope: {
-	        shark: '=',
-	        buttonText: '@',
-	        action: '@'
-	      },
-	      link: function(scope, element, attrs, controller) {
-	        var actions = {
-	          update: controller.updateShark,
-	          create: controller.createShark
-	        };
-	        scope.save = actions[scope.action];
-	      }
-	    };
-	  });
-	};
-
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(app) {
-	  __webpack_require__(19)(app);
-	  __webpack_require__(21)(app);
-	};
-
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(app) {
-	  __webpack_require__(20)(app);
-	};
-
-
-/***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var handleError = __webpack_require__(11).handleError;
-	var baseUrl = __webpack_require__(14).baseUrl;
-	var deeplyClone = __webpack_require__(11).deeplyClone;
-	
-	module.exports = function(app) {
-	
-	  app.controller('PreysController', ['$http', function($http) {
-	  this.preys = [];
-	  this.original = {};
-	  this.getAll = () => {
-	    $http.get(baseUrl + '/api/preys', this.newPrey)
-	      .then((res) => {
-	        this.preys = res.data;
-	      }, handleError.bind(this));
-	  };
-	
-	  this.createPrey = () => {
-	    $http.post(baseUrl + '/api/preys', this.newPrey)
-	      .then((res) => {
-	        this.preys.push(res.data);
-	        this.newPrey = null;
-	      }, handleError.bind(this));
-	  };
-	
-	  this.editPrey = (prey) => {
-	    prey.editing = true;
-	    this.original = deeplyclone(prey);
-	  };
-	
-	  this.cancelPrey = (prey) => {
-	    prey.editing = false;
-	    prey.name = this.original.name;
-	    prey.speed = this.original.speed;
-	  };
-	
-	  this.updatePrey = (prey) => {
-	    $http.put(baseUrl + '/api/preys/' + prey._id, prey)
-	      .then(() => {
-	        prey.editing = false;
-	      }, handleError.bind(this));
-	  };
-	
-	  this.removePrey = (prey) => {
-	    $http.delete(baseUrl + '/api/preys/' + prey._id)
-	      .then(() => {
-	        this.preys.splice(this.preys.indexOf(prey), 1);
-	      }, handleError.bind(this));
-	  };
-	}]);
-	}
-
-
-/***/ },
-/* 21 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(app) {
-	  __webpack_require__(22)(app);
-	  __webpack_require__(23)(app);
-	};
-
-
-/***/ },
-/* 22 */
-/***/ function(module, exports) {
-
-	module.exports = function(app) {
-	  app.directive('preyListItem', function() {
-	    return {
-	      restrict: 'EAC',
-	      replace: true,
-	      require: '^ngController',
-	      transclude: true,
-	      templateUrl: 'templates/preys/directives/prey_list_item.html',
-	      scope: {
-	        prey: '='
-	      },
-	      link: function(scope, element, attrs, controller) {
-	        scope.remove = controller.removePrey;
-	      }
-	    };
-	  });
-	};
-
-
-/***/ },
-/* 23 */
-/***/ function(module, exports) {
-
-	module.exports = function(app) {
-	  app.directive('preyForm', function() {
-	    return {
-	      restrict: 'EAC',
-	      require: '^ngController',
-	      transclude: true,
-	      templateUrl: '/templates/preys/directives/prey_form.html',
-	      scope: {
-	        prey: '=',
-	        buttonText: '@',
-	        action: '@'
-	      },
-	      link: function(scope, element, attrs, controller) {
-	        var actions = {
-	          update: controller.updatePrey,
-	          create: controller.createPrey
-	        };
-	        scope.save = actions[scope.action];
-	      }
-	    };
-	  });
-	};
-
-
-/***/ },
-/* 24 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var angular = __webpack_require__(2);
-	__webpack_require__(25);
-	
-	describe('sharks controller', function() {
-	  var $controller;
-	
-	  beforeEach(angular.mock.module('angApp'));
-	
-	  beforeEach(angular.mock.inject(function(_$controller_) {
-	    $controller = _$controller_;
-	  }));
-	
-	  it('should be a controller', function() {
-	    var sharksctrl = $controller('SharksController');
-	    expect(typeof sharksctrl).toBe('object');
-	    expect(typeof sharksctrl.getAll).toBe('function');
-	  });
-	
-	  describe('REST functionality', function() {
-	    var $httpBackend;
-	    var sharksctrl;
-	    beforeEach(angular.mock.inject(function(_$httpBackend_) {
-	      $httpBackend = _$httpBackend_;
-	      sharksctrl = $controller('SharksController');
-	    }));
-	
-	    afterEach(function() {
-	      $httpBackend.verifyNoOutstandingExpectation();
-	      $httpBackend.verifyNoOutstandingRequest();
-	    });
-	
-	    it('should send a GET to recieve sharks', function() {
-	      $httpBackend.expectGET('http://localhost:5555/api/sharks')
-	      .respond(200, [{ name: 'test shark' }]);
-	      sharksctrl.getAll();
-	      $httpBackend.flush();
-	      expect(sharksctrl.sharks.length).toBe(1);
-	      expect(sharksctrl.sharks[0].name).toBe('test shark');
-	    });
-	
-	    it('should create a shark', function() {
-	      $httpBackend.expectPOST('http://localhost:5555/api/sharks', { name: 'great white' })
-	      .respond(200, { name: 'some shark' });
-	      expect(sharksctrl.sharks.length).toBe(0);
-	      sharksctrl.newShark = { name: 'great white' };
-	      sharksctrl.createShark();
-	      $httpBackend.flush();
-	      expect(sharksctrl.sharks[0].name).toBe('some shark');
-	      expect(sharksctrl.newShark).toBe(null);
-	    });
-	
-	    it('should update a shark', function() {
-	      $httpBackend.expectPUT('http://localhost:5555/api/sharks/1',
-	      { name: 'change sharks!', editing: true, _id: 1 }).respond(200);
-	
-	      sharksctrl.sharks = [{ name: 'test shark', editing: true, _id: 1 }];
-	      sharksctrl.sharks[0].name = 'change sharks!';
-	      sharksctrl.updateShark(sharksctrl.sharks[0]);
-	      $httpBackend.flush();
-	      expect(sharksctrl.sharks[0].editing).toBe(false);
-	    });
-	
-	    it('should delete a shark', function() {
-	      $httpBackend.expectDELETE('http://localhost:5555/api/sharks/1').respond(200);
-	      sharksctrl.sharks = [{ name: 'great white', _id: 1 }];
-	      sharksctrl.removeShark(sharksctrl.sharks[0]);
-	      $httpBackend.flush();
-	      expect(sharksctrl.sharks.length).toBe(0);
-	    });
-	  });
-	});
-
-
-/***/ },
-/* 25 */
+/* 3 */
 /***/ function(module, exports) {
 
 	/**
@@ -34691,11 +33948,440 @@
 
 
 /***/ },
-/* 26 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var angular = __webpack_require__(2);
-	__webpack_require__(25);
+	const angular = __webpack_require__(1);
+	const angApp = angular.module('angApp', []);
+	
+	__webpack_require__(5)(angApp);
+	__webpack_require__(7)(angApp);
+	__webpack_require__(14)(angApp);
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+	  __webpack_require__(6)(app);
+	};
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.factory('spHandleError', function() {
+	    return function(errorsArr, message) {
+	      return function(err) {
+	        console.log(err);
+	        if (Array.isArray(errorsArr)) {
+	          errorsArr.push(new Error(message || 'server error'));
+	        }
+	      };
+	    };
+	  });
+	};
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+	  __webpack_require__(8)(app);
+	  __webpack_require__(11)(app);
+	};
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+	  __webpack_require__(9)(app);
+	};
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const angular = __webpack_require__(1);
+	var baseUrl = __webpack_require__(10).baseUrl;
+	
+	module.exports = function(app) {
+	
+	  app.controller('SharksController', ['$http','spHandleError', function($http, spHandleError) {
+	    this.sharks = [];
+	    this.errors = [];
+	    this.getAll = function() {
+	      $http.get(baseUrl + '/api/sharks')
+	        .then((res) => {
+	          this.sharks = res.data;
+	        }, spHandleError(this.errors, 'could not retreive sharks'));
+	    }.bind(this);
+	
+	    this.createShark = function() {
+	      var sharkName = this.newShark.name;
+	      $http.post(baseUrl + '/api/sharks', this.newShark)
+	        .then((res) => {
+	          this.sharks.push(res.data);
+	          this.newShark = null;
+	        }, spHandleError(this.errors, 'could not create shark' + this.newShark.name));
+	    }.bind(this);
+	
+	    this.editShark = (shark) => {
+	      shark.editing = true;
+	      this.original = angular.copy(shark);
+	    };
+	
+	    this.cancelShark = (shark) => {
+	      shark.editing = false;
+	      for (var key in this.original) {
+	        if(this.original.hasOwnProperty(key)) {
+	           shark[key] = this.original[key];
+	         }
+	      }
+	    };
+	
+	    this.updateShark = function(shark) {
+	      $http.put(baseUrl + '/api/sharks/' + shark._id, shark)
+	        .then(() => {
+	          shark.editing = false;
+	        }, spHandleError(this.errors, 'could not update shark' + shark.name));
+	    }.bind(this);
+	
+	    this.removeShark = function(shark) {
+	      $http.delete(baseUrl + '/api/sharks/' + shark._id)
+	        .then(() => {
+	          this.sharks.splice(this.sharks.indexOf(shark), 1);
+	        }, spHandleError(this.errors, 'chould not delete this shark' + shark.name));
+	    }.bind(this);
+	  }]);
+	};
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  baseUrl: 'http://localhost:5555'
+	};
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+	  __webpack_require__(12)(app);
+	  __webpack_require__(13)(app);
+	};
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.directive('sharkListItem', function() {
+	    return {
+	      restrict: 'EAC',
+	      replace: true,
+	      require: '^ngController',
+	      transclude: true,
+	      templateUrl: 'templates/sharks/directives/shark_list_item.html',
+	      scope: {
+	        shark: '='
+	      },
+	      link: function(scope, element, attrs, controller) {
+	        scope.remove = controller.removeShark;
+	        scope.edit = controller.editShark;
+	      }
+	    };
+	  });
+	};
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.directive('sharkForm', function() {
+	    return {
+	      restrict: 'EAC',
+	      require: '^ngController',
+	      transclude: true,
+	      templateUrl: '/templates/sharks/directives/shark_form.html',
+	      scope: {
+	        shark: '=',
+	        buttonText: '@',
+	        action: '@'
+	      },
+	      link: function(scope, element, attrs, controller) {
+	        var actions = {
+	          update: controller.updateShark,
+	          create: controller.createShark
+	        };
+	        scope.save = actions[scope.action];
+	      }
+	    };
+	  });
+	};
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+	  __webpack_require__(15)(app);
+	  __webpack_require__(17)(app);
+	};
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+	  __webpack_require__(16)(app);
+	};
+
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const angular = __webpack_require__(1);
+	var baseUrl = __webpack_require__(10).baseUrl;
+	
+	module.exports = function(app) {
+	
+	  app.controller('PreysController', ['$http', 'spHandleError', function($http, spHandleError) {
+	    this.preys = [];
+	    this.errors = [];
+	    this.getAll = function() {
+	      $http.get(baseUrl + '/api/preys')
+	        .then((res) => {
+	          this.preys = res.data;
+	        }, spHandleError(this.errors, 'could not retrive preys'));
+	    }.bind(this);
+	
+	    this.createPrey = function() {
+	      var preyName = this.newPrey.name;
+	      $http.post(baseUrl + '/api/preys', this.newPrey)
+	        .then((res) => {
+	          this.preys.push(res.data);
+	          this.newPrey = null;
+	        }, spHandleError(this.errors, 'could not create prey' + this.newPrey.name));
+	    }.bind(this);
+	
+	    this.editPrey = (prey) => {
+	      prey.editing = true;
+	      this.original = angular.copy(prey);
+	    };
+	
+	    this.cancelPrey = (prey) => {
+	      prey.editing = false;
+	      for (var key in this.original) {
+	        if(this.original.hasOwnProperty(key)) {
+	           prey[key] = this.original[key];
+	         }
+	       }
+	    };
+	
+	    this.updatePrey = function(prey) {
+	      $http.put(baseUrl + '/api/preys/' + prey._id, prey)
+	        .then(() => {
+	          prey.editing = false;
+	        }, spHandleError(this.errors, 'could not update prey' + prey.name));
+	    }.bind(this);
+	
+	    this.removePrey = function(prey) {
+	      $http.delete(baseUrl + '/api/preys/' + prey._id)
+	        .then(() => {
+	          this.preys.splice(this.preys.indexOf(prey), 1);
+	        }, spHandleError(this.errors, 'could not delete prey' + prey.name));
+	    }.bind(this);
+	  }]);
+	};
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+	  __webpack_require__(18)(app);
+	  __webpack_require__(19)(app);
+	};
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.directive('preyListItem', function() {
+	    return {
+	      restrict: 'EAC',
+	      replace: true,
+	      require: '^ngController',
+	      transclude: true,
+	      templateUrl: 'templates/preys/directives/prey_list_item.html',
+	      scope: {
+	        prey: '='
+	      },
+	      link: function(scope, element, attrs, controller) {
+	        scope.remove = controller.removePrey;
+	        scope.edit = controller.editPrey;
+	      }
+	    };
+	  });
+	};
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.directive('preyForm', function() {
+	    return {
+	      restrict: 'EAC',
+	      require: '^ngController',
+	      transclude: true,
+	      templateUrl: '/templates/preys/directives/prey_form.html',
+	      scope: {
+	        prey: '=',
+	        buttonText: '@',
+	        action: '@'
+	      },
+	      link: function(scope, element, attrs, controller) {
+	        var actions = {
+	          update: controller.updatePrey,
+	          create: controller.createPrey
+	        };
+	        scope.save = actions[scope.action];
+	      }
+	    };
+	  });
+	};
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular = __webpack_require__(1);
+	
+	describe('spHandleError service', function() {
+	  var spHandleError;
+	  beforeEach(angular.mock.module('angApp'));
+	
+	  it('should return a function', angular.mock.inject(function(spHandleError) {
+	    expect(typeof spHandleError).toBe('function');
+	  }));
+	
+	  it('should add an error to the errors array', angular.mock.inject(function(spHandleError) {
+	    var testArr = [];
+	    spHandleError(testArr, 'test message')();
+	    expect(testArr.length).toBe(1);
+	    expect(testArr[0] instanceof Error).toBe(true);
+	    expect(testArr[0].message).toBe('test message');
+	  }));
+	});
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular = __webpack_require__(1);
+	__webpack_require__(3);
+	
+	describe('sharks controller', function() {
+	  var $controller;
+	
+	  beforeEach(angular.mock.module('angApp'));
+	
+	  beforeEach(angular.mock.inject(function(_$controller_) {
+	    $controller = _$controller_;
+	  }));
+	
+	  it('should be a controller', function() {
+	    var sharksctrl = $controller('SharksController');
+	    expect(typeof sharksctrl).toBe('object');
+	    expect(typeof sharksctrl.getAll).toBe('function');
+	  });
+	
+	  describe('REST functionality', function() {
+	    var $httpBackend;
+	    var sharksctrl;
+	    beforeEach(angular.mock.inject(function(_$httpBackend_) {
+	      $httpBackend = _$httpBackend_;
+	      sharksctrl = $controller('SharksController');
+	    }));
+	
+	    afterEach(function() {
+	      $httpBackend.verifyNoOutstandingExpectation();
+	      $httpBackend.verifyNoOutstandingRequest();
+	    });
+	
+	    it('should send a GET to recieve sharks', function() {
+	      $httpBackend.expectGET('http://localhost:5555/api/sharks')
+	      .respond(200, [{ name: 'test shark' }]);
+	      sharksctrl.getAll();
+	      $httpBackend.flush();
+	      expect(sharksctrl.sharks.length).toBe(1);
+	      expect(sharksctrl.sharks[0].name).toBe('test shark');
+	    });
+	
+	    it('should create a shark', function() {
+	      $httpBackend.expectPOST('http://localhost:5555/api/sharks', { name: 'great white' })
+	      .respond(200, { name: 'some shark' });
+	      expect(sharksctrl.sharks.length).toBe(0);
+	      sharksctrl.newShark = { name: 'great white' };
+	      sharksctrl.createShark();
+	      $httpBackend.flush();
+	      expect(sharksctrl.sharks[0].name).toBe('some shark');
+	      expect(sharksctrl.newShark).toBe(null);
+	    });
+	
+	    it('should update a shark', function() {
+	      $httpBackend.expectPUT('http://localhost:5555/api/sharks/1',
+	      { name: 'change sharks!', editing: true, _id: 1 }).respond(200);
+	
+	      sharksctrl.sharks = [{ name: 'test shark', editing: true, _id: 1 }];
+	      sharksctrl.sharks[0].name = 'change sharks!';
+	      sharksctrl.updateShark(sharksctrl.sharks[0]);
+	      $httpBackend.flush();
+	      expect(sharksctrl.sharks[0].editing).toBe(false);
+	    });
+	
+	    it('should delete a shark', function() {
+	      $httpBackend.expectDELETE('http://localhost:5555/api/sharks/1').respond(200);
+	      sharksctrl.sharks = [{ name: 'great white', _id: 1 }];
+	      sharksctrl.removeShark(sharksctrl.sharks[0]);
+	      $httpBackend.flush();
+	      expect(sharksctrl.sharks.length).toBe(0);
+	    });
+	  });
+	});
+
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular = __webpack_require__(1);
+	__webpack_require__(3);
 	
 	describe('preys controller', function() {
 	  var $controller;
