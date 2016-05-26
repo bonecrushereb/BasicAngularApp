@@ -3,23 +3,17 @@ var baseUrl = require('../../config').baseUrl;
 
 module.exports = function(app) {
 
-  app.controller('SharksController', ['$http','spHandleError', function($http, spHandleError) {
+  app.controller('SharksController', ['spResource', function(Resource) {
     this.sharks = [];
     this.errors = [];
-    this.getAll = function() {
-      $http.get(baseUrl + '/api/sharks')
-        .then((res) => {
-          this.sharks = res.data;
-        }, spHandleError(this.errors, 'could not retreive sharks'));
-    }.bind(this);
+    this.remote = new Resource(this.sharks, this.errors, baseUrl + '/api/sharks');
+    this.getAll = this.remote.getAll.bind(this.remote);
 
     this.createShark = function() {
-      var sharkName = this.newShark.name;
-      $http.post(baseUrl + '/api/sharks', this.newShark)
-        .then((res) => {
-          this.sharks.push(res.data);
+      this.remote.create(this.newShark)
+        .then(() => {
           this.newShark = null;
-        }, spHandleError(this.errors, 'could not create shark' + this.newShark.name));
+        });
     }.bind(this);
 
     this.editShark = (shark) => {
@@ -37,17 +31,12 @@ module.exports = function(app) {
     };
 
     this.updateShark = function(shark) {
-      $http.put(baseUrl + '/api/sharks/' + shark._id, shark)
+      this.remote.update(shark)
         .then(() => {
           shark.editing = false;
-        }, spHandleError(this.errors, 'could not update shark' + shark.name));
-    }.bind(this);
+        });
+    };
 
-    this.removeShark = function(shark) {
-      $http.delete(baseUrl + '/api/sharks/' + shark._id)
-        .then(() => {
-          this.sharks.splice(this.sharks.indexOf(shark), 1);
-        }, spHandleError(this.errors, 'chould not delete this shark' + shark.name));
-    }.bind(this);
+    this.removeShark = this.remote.remove.bind(this.remote);
   }]);
 };

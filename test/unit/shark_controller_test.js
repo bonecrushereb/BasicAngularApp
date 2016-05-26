@@ -65,7 +65,7 @@ describe('sharks controller', function() {
       sharksctrl.sharks = [{ name: 'great white', _id: 1 }];
       sharksctrl.removeShark(sharksctrl.sharks[0]);
       $httpBackend.flush();
-      expect(sharksctrl.sharks.length).toBe(0);
+      expect(sharksctrl.remote.data.length).toBe(0);
     });
   });
 });
