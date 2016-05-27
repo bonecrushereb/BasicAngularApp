@@ -3,23 +3,17 @@ var baseUrl = require('../../config').baseUrl;
 
 module.exports = function(app) {
 
-  app.controller('PreysController', ['$http', 'spHandleError', function($http, spHandleError) {
+  app.controller('PreysController', ['spResource', function(Resource) {
     this.preys = [];
     this.errors = [];
-    this.getAll = function() {
-      $http.get(baseUrl + '/api/preys')
-        .then((res) => {
-          this.preys = res.data;
-        }, spHandleError(this.errors, 'could not retrive preys'));
-    }.bind(this);
+    this.remote = new Resource(this.preys, this.errors, baseUrl + '/api/preys');
+    this.getAll = this.remote.getAll.bind(this.remote);
 
     this.createPrey = function() {
-      var preyName = this.newPrey.name;
-      $http.post(baseUrl + '/api/preys', this.newPrey)
-        .then((res) => {
-          this.preys.push(res.data);
+      this.remote.create(this.newPrey)
+        .then(() => {
           this.newPrey = null;
-        }, spHandleError(this.errors, 'could not create prey' + this.newPrey.name));
+        });
     }.bind(this);
 
     this.editPrey = (prey) => {
@@ -37,17 +31,12 @@ module.exports = function(app) {
     };
 
     this.updatePrey = function(prey) {
-      $http.put(baseUrl + '/api/preys/' + prey._id, prey)
+      this.remote.update(prey)
         .then(() => {
           prey.editing = false;
-        }, spHandleError(this.errors, 'could not update prey' + prey.name));
-    }.bind(this);
+        });
+    };
 
-    this.removePrey = function(prey) {
-      $http.delete(baseUrl + '/api/preys/' + prey._id)
-        .then(() => {
-          this.preys.splice(this.preys.indexOf(prey), 1);
-        }, spHandleError(this.errors, 'could not delete prey' + prey.name));
-    }.bind(this);
+    this.removePrey = this.remote.remove.bind(this.remote);
   }]);
 };

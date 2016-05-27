@@ -47,9 +47,10 @@
 	const angular = __webpack_require__(1);
 	__webpack_require__(3);
 	__webpack_require__(4);
-	__webpack_require__(20);
 	__webpack_require__(21);
 	__webpack_require__(22);
+	__webpack_require__(23);
+	__webpack_require__(24);
 	// require('./shark_directive_test');
 	// require('./prey_directive_test');
 
@@ -33955,8 +33956,8 @@
 	const angApp = angular.module('angApp', []);
 	
 	__webpack_require__(5)(angApp);
-	__webpack_require__(7)(angApp);
-	__webpack_require__(14)(angApp);
+	__webpack_require__(8)(angApp);
+	__webpack_require__(15)(angApp);
 
 
 /***/ },
@@ -33965,6 +33966,7 @@
 
 	module.exports = function(app) {
 	  __webpack_require__(6)(app);
+	  __webpack_require__(7)(app);
 	};
 
 
@@ -33988,11 +33990,45 @@
 
 /***/ },
 /* 7 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	module.exports = function(app) {
-	  __webpack_require__(8)(app);
-	  __webpack_require__(11)(app);
+	  app.factory('spResource', ['$http', 'spHandleError', function($http, spError) {
+	    var Resource = function(resourceArr, errorsArr, baseUrl) {
+	      this.data = resourceArr;
+	      this.url = baseUrl;
+	      this.errors = errorsArr;
+	    };
+	
+	    Resource.prototype.getAll = function() {
+	        return $http.get(this.url)
+	          .then((res) => {
+	            this.data.splice(0);
+	            for(var i = 0; i < res.data.length; i++)
+	              this.data.push(res.data[i]);
+	          }, spError(this.errors, 'could not fetch resource'))
+	      };
+	
+	      Resource.prototype.create = function(resource) {
+	        return $http.post(this.url, resource)
+	          .then((res) => {
+	            this.data.push(res.data);
+	          }, spError(this.errors, 'could not save resource'));
+	      };
+	
+	      Resource.prototype.update = function(resource) {
+	        return $http.put(this.url + '/' + resource._id, resource)
+	          .catch(spError(this.errors, 'could not update resource'));
+	      };
+	
+	      Resource.prototype.remove = function(resource) {
+	        return $http.delete(this.url + '/' + resource._id)
+	          .then((res) => {
+	            this.data.splice(this.data.indexOf(resource), 1);
+	          }, spError(this.errors, 'could not remove the resource'));
+	      };
+	      return Resource;
+	  }]);
 	};
 
 
@@ -34002,6 +34038,7 @@
 
 	module.exports = function(app) {
 	  __webpack_require__(9)(app);
+	  __webpack_require__(12)(app);
 	};
 
 
@@ -34009,28 +34046,31 @@
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = function(app) {
+	  __webpack_require__(10)(app);
+	};
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
 	const angular = __webpack_require__(1);
-	var baseUrl = __webpack_require__(10).baseUrl;
+	var baseUrl = __webpack_require__(11).baseUrl;
 	
 	module.exports = function(app) {
 	
-	  app.controller('SharksController', ['$http','spHandleError', function($http, spHandleError) {
+	  app.controller('SharksController', ['spResource', function(Resource) {
 	    this.sharks = [];
 	    this.errors = [];
-	    this.getAll = function() {
-	      $http.get(baseUrl + '/api/sharks')
-	        .then((res) => {
-	          this.sharks = res.data;
-	        }, spHandleError(this.errors, 'could not retreive sharks'));
-	    }.bind(this);
+	    this.remote = new Resource(this.sharks, this.errors, baseUrl + '/api/sharks');
+	    this.getAll = this.remote.getAll.bind(this.remote);
 	
 	    this.createShark = function() {
-	      var sharkName = this.newShark.name;
-	      $http.post(baseUrl + '/api/sharks', this.newShark)
-	        .then((res) => {
-	          this.sharks.push(res.data);
+	      this.remote.create(this.newShark)
+	        .then(() => {
 	          this.newShark = null;
-	        }, spHandleError(this.errors, 'could not create shark' + this.newShark.name));
+	        });
 	    }.bind(this);
 	
 	    this.editShark = (shark) => {
@@ -34048,24 +34088,19 @@
 	    };
 	
 	    this.updateShark = function(shark) {
-	      $http.put(baseUrl + '/api/sharks/' + shark._id, shark)
+	      this.remote.update(shark)
 	        .then(() => {
 	          shark.editing = false;
-	        }, spHandleError(this.errors, 'could not update shark' + shark.name));
-	    }.bind(this);
+	        });
+	    };
 	
-	    this.removeShark = function(shark) {
-	      $http.delete(baseUrl + '/api/sharks/' + shark._id)
-	        .then(() => {
-	          this.sharks.splice(this.sharks.indexOf(shark), 1);
-	        }, spHandleError(this.errors, 'chould not delete this shark' + shark.name));
-	    }.bind(this);
+	    this.removeShark = this.remote.remove.bind(this.remote);
 	  }]);
 	};
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -34074,17 +34109,17 @@
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(app) {
-	  __webpack_require__(12)(app);
 	  __webpack_require__(13)(app);
+	  __webpack_require__(14)(app);
 	};
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports) {
 
 	module.exports = function(app) {
@@ -34108,7 +34143,7 @@
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	module.exports = function(app) {
@@ -34136,21 +34171,12 @@
 
 
 /***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(app) {
-	  __webpack_require__(15)(app);
-	  __webpack_require__(17)(app);
-	};
-
-
-/***/ },
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(app) {
 	  __webpack_require__(16)(app);
+	  __webpack_require__(18)(app);
 	};
 
 
@@ -34158,28 +34184,31 @@
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = function(app) {
+	  __webpack_require__(17)(app);
+	};
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
 	const angular = __webpack_require__(1);
-	var baseUrl = __webpack_require__(10).baseUrl;
+	var baseUrl = __webpack_require__(11).baseUrl;
 	
 	module.exports = function(app) {
 	
-	  app.controller('PreysController', ['$http', 'spHandleError', function($http, spHandleError) {
+	  app.controller('PreysController', ['spResource', function(Resource) {
 	    this.preys = [];
 	    this.errors = [];
-	    this.getAll = function() {
-	      $http.get(baseUrl + '/api/preys')
-	        .then((res) => {
-	          this.preys = res.data;
-	        }, spHandleError(this.errors, 'could not retrive preys'));
-	    }.bind(this);
+	    this.remote = new Resource(this.preys, this.errors, baseUrl + '/api/preys');
+	    this.getAll = this.remote.getAll.bind(this.remote);
 	
 	    this.createPrey = function() {
-	      var preyName = this.newPrey.name;
-	      $http.post(baseUrl + '/api/preys', this.newPrey)
-	        .then((res) => {
-	          this.preys.push(res.data);
+	      this.remote.create(this.newPrey)
+	        .then(() => {
 	          this.newPrey = null;
-	        }, spHandleError(this.errors, 'could not create prey' + this.newPrey.name));
+	        });
 	    }.bind(this);
 	
 	    this.editPrey = (prey) => {
@@ -34197,34 +34226,29 @@
 	    };
 	
 	    this.updatePrey = function(prey) {
-	      $http.put(baseUrl + '/api/preys/' + prey._id, prey)
+	      this.remote.update(prey)
 	        .then(() => {
 	          prey.editing = false;
-	        }, spHandleError(this.errors, 'could not update prey' + prey.name));
-	    }.bind(this);
+	        });
+	    };
 	
-	    this.removePrey = function(prey) {
-	      $http.delete(baseUrl + '/api/preys/' + prey._id)
-	        .then(() => {
-	          this.preys.splice(this.preys.indexOf(prey), 1);
-	        }, spHandleError(this.errors, 'could not delete prey' + prey.name));
-	    }.bind(this);
+	    this.removePrey = this.remote.remove.bind(this.remote);
 	  }]);
 	};
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(app) {
-	  __webpack_require__(18)(app);
 	  __webpack_require__(19)(app);
+	  __webpack_require__(20)(app);
 	};
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports) {
 
 	module.exports = function(app) {
@@ -34248,7 +34272,7 @@
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	module.exports = function(app) {
@@ -34276,7 +34300,7 @@
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var angular = __webpack_require__(1);
@@ -34300,7 +34324,23 @@
 
 
 /***/ },
-/* 21 */
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const angular = __webpack_require__(1);
+	
+	describe('spResource service', function() {
+	  var spResource;
+	  beforeEach(angular.mock.module('angApp'));
+	
+	  it('should return a function', angular.mock.inject(function(spResource) {
+	    expect(typeof spResource).toBe('function');
+	  }));
+	});
+
+
+/***/ },
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var angular = __webpack_require__(1);
@@ -34370,14 +34410,14 @@
 	      sharksctrl.sharks = [{ name: 'great white', _id: 1 }];
 	      sharksctrl.removeShark(sharksctrl.sharks[0]);
 	      $httpBackend.flush();
-	      expect(sharksctrl.sharks.length).toBe(0);
+	      expect(sharksctrl.remote.data.length).toBe(0);
 	    });
 	  });
 	});
 
 
 /***/ },
-/* 22 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var angular = __webpack_require__(1);
@@ -34447,7 +34487,7 @@
 	      preysctrl.preys = [{ name: 'human', _id: 1 }];
 	      preysctrl.removePrey(preysctrl.preys[0]);
 	      $httpBackend.flush();
-	      expect(preysctrl.preys.length).toBe(0);
+	      expect(preysctrl.remote.data.length).toBe(0);
 	    });
 	  });
 	});

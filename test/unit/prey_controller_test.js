@@ -65,7 +65,7 @@ describe('preys controller', function() {
       preysctrl.preys = [{ name: 'human', _id: 1 }];
       preysctrl.removePrey(preysctrl.preys[0]);
       $httpBackend.flush();
-      expect(preysctrl.preys.length).toBe(0);
+      expect(preysctrl.remote.data.length).toBe(0);
     });
   });
 });
