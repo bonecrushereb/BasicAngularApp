@@ -12,9 +12,3 @@ module.exports = function(app) {
     };
   });
 };
-
-// angApp.controller('PreysController', ['spStore', function(spStore) {
-//   this.spStore = spStore;
-//   this.addPreys = spStore.addPreys.bind(spStore);
-//   this.preys = spStore.preys.length;
-// }]);
