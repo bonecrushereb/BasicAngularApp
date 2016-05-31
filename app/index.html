@@ -30,6 +30,8 @@
           </shark-form>
         </shark-list-item>
       </ul>
+
+      <p>The number of sharks in the list are: {{sharksctrl.sharks.length}}</p>
     </section>
 
     <section class ="prey" data-ng-controller="PreysController as preysctrl" data-ng-init="preysctrl.getAll()">
@@ -54,8 +56,9 @@
           </prey-form>
         </prey-list-item>
       </ul>
-    </section>
 
+      <p>The number of preys in the list are: {{preysctrl.preys.length}}</p>
+    </section>
   </main>
 <script src="./bundle.js"></script>
 </body>
