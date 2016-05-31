@@ -3,12 +3,15 @@ var baseUrl = require('../../config').baseUrl;
 
 module.exports = function(app) {
 
-  app.controller('SharksController', ['spResource', function(Resource) {
-    this.sharks = [];
+  app.controller('SharksController', ['spResource','spStore', function(Resource, spStore) {
+    this.spStore = spStore;
+    this.sharks = spStore.sharks;
+    this.addSharks = spStore.addShark.bind(spStore);
+    this.sharks = spStore.sharks.length;
     this.errors = [];
     this.remote = new Resource(this.sharks, this.errors, baseUrl + '/api/sharks');
+    this.total = spStore.total.call(spStore);
     this.getAll = this.remote.getAll.bind(this.remote);
-
     this.createShark = function() {
       this.remote.create(this.newShark)
         .then(() => {

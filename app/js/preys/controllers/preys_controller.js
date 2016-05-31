@@ -3,8 +3,11 @@ var baseUrl = require('../../config').baseUrl;
 
 module.exports = function(app) {
 
-  app.controller('PreysController', ['spResource', function(Resource) {
-    this.preys = [];
+  app.controller('PreysController', ['spResource','spStore', function(Resource, spStore) {
+    this.spStore = spStore;
+    this.preys = spStore.preys;
+    this.addPreys = spStore.addPrey.bind(spStore);
+    this.preys = spStore.preys.length;
     this.errors = [];
     this.remote = new Resource(this.preys, this.errors, baseUrl + '/api/preys');
     this.getAll = this.remote.getAll.bind(this.remote);

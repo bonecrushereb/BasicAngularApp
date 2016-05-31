@@ -1,5 +1,6 @@
 module.exports = function(app) {
   app.factory('spResource', ['$http', 'spHandleError', function($http, spError) {
+    var baseUrl = require('../config').baseUrl;
     var Resource = function(resourceArr, errorsArr, baseUrl) {
       this.data = resourceArr;
       this.url = baseUrl;
@@ -9,7 +10,7 @@ module.exports = function(app) {
     Resource.prototype.getAll = function() {
         return $http.get(this.url)
           .then((res) => {
-            this.data.splice(0);
+            res.data.splice(0);
             for(var i = 0; i < res.data.length; i++)
               this.data.push(res.data[i]);
           }, spError(this.errors, 'could not fetch resource'))
@@ -20,7 +21,7 @@ module.exports = function(app) {
           .then((res) => {
             this.data.push(res.data);
           }, spError(this.errors, 'could not save resource'));
-      };
+      }.bind(Resource);
 
       Resource.prototype.update = function(resource) {
         return $http.put(this.url + '/' + resource._id, resource)
