@@ -21,7 +21,7 @@ module.exports = function(app) {
           .then((res) => {
             this.data.push(res.data);
           }, spError(this.errors, 'could not save resource'));
-      }.bind(Resource);
+      };
 
       Resource.prototype.update = function(resource) {
         return $http.put(this.url + '/' + resource._id, resource)

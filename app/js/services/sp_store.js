@@ -3,9 +3,6 @@ module.exports = function(app) {
     return {
       sharks: [],
       preys: [],
-      total: function() {
-        return this.sharks.length + this.preys.length;
-      },
       addShark: function(shark) {
         this.sharks.push(shark);
       },

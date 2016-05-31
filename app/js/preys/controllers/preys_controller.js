@@ -7,7 +7,6 @@ module.exports = function(app) {
     this.spStore = spStore;
     this.preys = spStore.preys;
     this.addPreys = spStore.addPrey.bind(spStore);
-    this.preys = spStore.preys.length;
     this.errors = [];
     this.remote = new Resource(this.preys, this.errors, baseUrl + '/api/preys');
     this.getAll = this.remote.getAll.bind(this.remote);
@@ -19,12 +18,12 @@ module.exports = function(app) {
         });
     }.bind(this);
 
-    this.editPrey = (prey) => {
+    this.editPrey = function(prey) {
       prey.editing = true;
       this.original = angular.copy(prey);
     };
 
-    this.cancelPrey = (prey) => {
+    this.cancelPrey = function(prey) {
       prey.editing = false;
       for (var key in this.original) {
         if(this.original.hasOwnProperty(key)) {
