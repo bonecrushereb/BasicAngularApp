@@ -1,5 +1,7 @@
-@import './base/base';
 @import './base/reset';
+@import './base/functions';
+@import './base/base';
+@import './base/extends';
 @import './module/mixins';
 @import './module/module';
 @import './layout/layout';
