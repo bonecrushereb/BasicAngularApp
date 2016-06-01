@@ -8,13 +8,10 @@ module.exports = function(app) {
       },
       addPrey: function(prey) {
         this.preys.push(prey);
+      },
+      total: function(sharks, preys) {
+        return this.sharks.length + this.preys.length;
       }
     };
   });
 };
-
-// angApp.controller('PreysController', ['spStore', function(spStore) {
-//   this.spStore = spStore;
-//   this.addPreys = spStore.addPreys.bind(spStore);
-//   this.preys = spStore.preys.length;
-// }]);

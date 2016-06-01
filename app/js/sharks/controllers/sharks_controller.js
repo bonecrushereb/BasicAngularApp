@@ -8,6 +8,8 @@ module.exports = function(app) {
     this.addSharks = spStore.addShark.bind(spStore);
     this.errors = [];
     this.remote = new Resource(this.sharks, this.errors, baseUrl + '/api/sharks');
+    this.total = spStore.total();
+
     this.getAll = this.remote.getAll.bind(this.remote);
 
     this.createShark = function() {
