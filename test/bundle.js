@@ -47,10 +47,11 @@
 	const angular = __webpack_require__(1);
 	__webpack_require__(3);
 	__webpack_require__(4);
-	__webpack_require__(21);
+	// require('./sp_handle_error_test');
+	// require('./sp_resource_test');
 	__webpack_require__(22);
-	__webpack_require__(23);
-	__webpack_require__(24);
+	// require('./shark_controller_test.js');
+	// require('./prey_controller_test.js');
 	// require('./shark_directive_test');
 	// require('./prey_directive_test');
 
@@ -33956,8 +33957,8 @@
 	const angApp = angular.module('angApp', []);
 	
 	__webpack_require__(5)(angApp);
-	__webpack_require__(8)(angApp);
-	__webpack_require__(15)(angApp);
+	__webpack_require__(10)(angApp);
+	__webpack_require__(16)(angApp);
 
 
 /***/ },
@@ -33967,11 +33968,35 @@
 	module.exports = function(app) {
 	  __webpack_require__(6)(app);
 	  __webpack_require__(7)(app);
+	  __webpack_require__(8)(app);
 	};
 
 
 /***/ },
 /* 6 */
+/***/ function(module, exports) {
+
+	module.exports = function(app) {
+	  app.factory('spStore', function() {
+	    return {
+	      sharks: [],
+	      preys: [],
+	      addShark: function(shark) {
+	        this.sharks.push(shark);
+	      },
+	      addPrey: function(prey) {
+	        this.preys.push(prey);
+	      },
+	      total: function() {
+	        return this.sharks.length + this.preys.length;
+	      }
+	    };
+	  });
+	};
+
+
+/***/ },
+/* 7 */
 /***/ function(module, exports) {
 
 	module.exports = function(app) {
@@ -33989,11 +34014,12 @@
 
 
 /***/ },
-/* 7 */
-/***/ function(module, exports) {
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(app) {
 	  app.factory('spResource', ['$http', 'spHandleError', function($http, spError) {
+	    var baseUrl = __webpack_require__(9).baseUrl;
 	    var Resource = function(resourceArr, errorsArr, baseUrl) {
 	      this.data = resourceArr;
 	      this.url = baseUrl;
@@ -34003,7 +34029,7 @@
 	    Resource.prototype.getAll = function() {
 	        return $http.get(this.url)
 	          .then((res) => {
-	            this.data.splice(0);
+	            res.data.splice(0);
 	            for(var i = 0; i < res.data.length; i++)
 	              this.data.push(res.data[i]);
 	          }, spError(this.errors, 'could not fetch resource'))
@@ -34033,21 +34059,11 @@
 
 
 /***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(app) {
-	  __webpack_require__(9)(app);
-	  __webpack_require__(12)(app);
-	};
-
-
-/***/ },
 /* 9 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	module.exports = function(app) {
-	  __webpack_require__(10)(app);
+	module.exports = {
+	  baseUrl: 'http://localhost:5555'
 	};
 
 
@@ -34055,37 +34071,62 @@
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = function(app) {
+	  __webpack_require__(11)(app);
+	  __webpack_require__(13)(app);
+	};
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app) {
+	  __webpack_require__(12)(app);
+	};
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
 	const angular = __webpack_require__(1);
-	var baseUrl = __webpack_require__(11).baseUrl;
+	var baseUrl = __webpack_require__(9).baseUrl;
 	
 	module.exports = function(app) {
-	
-	  app.controller('SharksController', ['spResource', function(Resource) {
-	    this.sharks = [];
+	  app.controller('SharksController', ['spResource','spStore', function(Resource, spStore) {
+	    this.sharks = spStore.sharks;
+	    this.addSharks = spStore.addShark.bind(spStore);
 	    this.errors = [];
 	    this.remote = new Resource(this.sharks, this.errors, baseUrl + '/api/sharks');
+	
+	    this.total = function() {
+	      return spStore.total();
+	    }
+	
 	    this.getAll = this.remote.getAll.bind(this.remote);
 	
 	    this.createShark = function() {
 	      this.remote.create(this.newShark)
 	        .then(() => {
 	          this.newShark = null;
+	          this.total();
 	        });
 	    }.bind(this);
 	
-	    this.editShark = (shark) => {
+	    this.editShark = function(shark) {
 	      shark.editing = true;
 	      this.original = angular.copy(shark);
-	    };
+	    }.bind(this);
 	
-	    this.cancelShark = (shark) => {
+	    this.cancelShark = function(shark) {
 	      shark.editing = false;
 	      for (var key in this.original) {
 	        if(this.original.hasOwnProperty(key)) {
 	           shark[key] = this.original[key];
 	         }
 	      }
-	    };
+	    }.bind(this);
 	
 	    this.updateShark = function(shark) {
 	      this.remote.update(shark)
@@ -34100,26 +34141,17 @@
 
 
 /***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	  baseUrl: 'http://localhost:5555'
-	};
-
-
-/***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(app) {
-	  __webpack_require__(13)(app);
 	  __webpack_require__(14)(app);
+	  __webpack_require__(15)(app);
 	};
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	module.exports = function(app) {
@@ -34143,7 +34175,7 @@
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
 	module.exports = function(app) {
@@ -34171,21 +34203,12 @@
 
 
 /***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(app) {
-	  __webpack_require__(16)(app);
-	  __webpack_require__(18)(app);
-	};
-
-
-/***/ },
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(app) {
 	  __webpack_require__(17)(app);
+	  __webpack_require__(19)(app);
 	};
 
 
@@ -34193,13 +34216,24 @@
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = function(app) {
+	  __webpack_require__(18)(app);
+	};
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
 	const angular = __webpack_require__(1);
-	var baseUrl = __webpack_require__(11).baseUrl;
+	var baseUrl = __webpack_require__(9).baseUrl;
 	
 	module.exports = function(app) {
 	
-	  app.controller('PreysController', ['spResource', function(Resource) {
-	    this.preys = [];
+	  app.controller('PreysController', ['spResource','spStore', function(Resource, spStore) {
+	    this.spStore = spStore;
+	    this.preys = spStore.preys;
+	    this.addPreys = spStore.addPrey.bind(spStore);
 	    this.errors = [];
 	    this.remote = new Resource(this.preys, this.errors, baseUrl + '/api/preys');
 	    this.getAll = this.remote.getAll.bind(this.remote);
@@ -34211,12 +34245,12 @@
 	        });
 	    }.bind(this);
 	
-	    this.editPrey = (prey) => {
+	    this.editPrey = function(prey) {
 	      prey.editing = true;
 	      this.original = angular.copy(prey);
 	    };
 	
-	    this.cancelPrey = (prey) => {
+	    this.cancelPrey = function(prey) {
 	      prey.editing = false;
 	      for (var key in this.original) {
 	        if(this.original.hasOwnProperty(key)) {
@@ -34238,17 +34272,17 @@
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(app) {
-	  __webpack_require__(19)(app);
 	  __webpack_require__(20)(app);
+	  __webpack_require__(21)(app);
 	};
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	module.exports = function(app) {
@@ -34272,7 +34306,7 @@
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports) {
 
 	module.exports = function(app) {
@@ -34300,195 +34334,40 @@
 
 
 /***/ },
-/* 21 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var angular = __webpack_require__(1);
-	
-	describe('spHandleError service', function() {
-	  var spHandleError;
-	  beforeEach(angular.mock.module('angApp'));
-	
-	  it('should return a function', angular.mock.inject(function(spHandleError) {
-	    expect(typeof spHandleError).toBe('function');
-	  }));
-	
-	  it('should add an error to the errors array', angular.mock.inject(function(spHandleError) {
-	    var testArr = [];
-	    spHandleError(testArr, 'test message')();
-	    expect(testArr.length).toBe(1);
-	    expect(testArr[0] instanceof Error).toBe(true);
-	    expect(testArr[0].message).toBe('test message');
-	  }));
-	});
-
-
-/***/ },
 /* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const angular = __webpack_require__(1);
-	
-	describe('spResource service', function() {
-	  var spResource;
-	  beforeEach(angular.mock.module('angApp'));
-	
-	  it('should return a function', angular.mock.inject(function(spResource) {
-	    expect(typeof spResource).toBe('function');
-	  }));
-	});
-
-
-/***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var angular = __webpack_require__(1);
-	__webpack_require__(3);
 	
-	describe('sharks controller', function() {
-	  var $controller;
-	
+	describe('spStore service', function() {
+	  var spStore;
 	  beforeEach(angular.mock.module('angApp'));
 	
-	  beforeEach(angular.mock.inject(function(_$controller_) {
-	    $controller = _$controller_;
+	  it('should return an object', angular.mock.inject(function(spStore) {
+	    expect(typeof spStore).toBe('object');
 	  }));
+	  describe('spStore functions', function() {
 	
-	  it('should be a controller', function() {
-	    var sharksctrl = $controller('SharksController');
-	    expect(typeof sharksctrl).toBe('object');
-	    expect(typeof sharksctrl.getAll).toBe('function');
-	  });
 	
-	  describe('REST functionality', function() {
-	    var $httpBackend;
-	    var sharksctrl;
-	    beforeEach(angular.mock.inject(function(_$httpBackend_) {
-	      $httpBackend = _$httpBackend_;
-	      sharksctrl = $controller('SharksController');
+	    beforeEach(angular.mock.inject(function(spStore) {
+	      var sharks = [];
+	      var preys = [];
+	      spStore.addShark('test shark');
+	      spStore.addPrey('test prey');
 	    }));
 	
-	    afterEach(function() {
-	      $httpBackend.verifyNoOutstandingExpectation();
-	      $httpBackend.verifyNoOutstandingRequest();
-	    });
-	
-	    it('should send a GET to recieve sharks', function() {
-	      $httpBackend.expectGET('http://localhost:5555/api/sharks')
-	      .respond(200, [{ name: 'test shark' }]);
-	      sharksctrl.getAll();
-	      $httpBackend.flush();
-	      expect(sharksctrl.sharks.length).toBe(1);
-	      expect(sharksctrl.sharks[0].name).toBe('test shark');
-	    });
-	
-	    it('should create a shark', function() {
-	      $httpBackend.expectPOST('http://localhost:5555/api/sharks', { name: 'great white' })
-	      .respond(200, { name: 'some shark' });
-	      expect(sharksctrl.sharks.length).toBe(0);
-	      sharksctrl.newShark = { name: 'great white' };
-	      sharksctrl.createShark();
-	      $httpBackend.flush();
-	      expect(sharksctrl.sharks[0].name).toBe('some shark');
-	      expect(sharksctrl.newShark).toBe(null);
-	    });
-	
-	    it('should update a shark', function() {
-	      $httpBackend.expectPUT('http://localhost:5555/api/sharks/1',
-	      { name: 'change sharks!', editing: true, _id: 1 }).respond(200);
-	
-	      sharksctrl.sharks = [{ name: 'test shark', editing: true, _id: 1 }];
-	      sharksctrl.sharks[0].name = 'change sharks!';
-	      sharksctrl.updateShark(sharksctrl.sharks[0]);
-	      $httpBackend.flush();
-	      expect(sharksctrl.sharks[0].editing).toBe(false);
-	    });
-	
-	    it('should delete a shark', function() {
-	      $httpBackend.expectDELETE('http://localhost:5555/api/sharks/1').respond(200);
-	      sharksctrl.sharks = [{ name: 'great white', _id: 1 }];
-	      sharksctrl.removeShark(sharksctrl.sharks[0]);
-	      $httpBackend.flush();
-	      expect(sharksctrl.remote.data.length).toBe(0);
-	    });
-	  });
-	});
-
-
-/***/ },
-/* 24 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var angular = __webpack_require__(1);
-	__webpack_require__(3);
-	
-	describe('preys controller', function() {
-	  var $controller;
-	
-	  beforeEach(angular.mock.module('angApp'));
-	
-	  beforeEach(angular.mock.inject(function(_$controller_) {
-	    $controller = _$controller_;
-	  }));
-	
-	  it('should be a controller', function() {
-	    var preysctrl = $controller('PreysController');
-	    expect(typeof preysctrl).toBe('object');
-	    expect(typeof preysctrl.getAll).toBe('function');
-	  });
-	
-	  describe('REST functionality', function() {
-	    var $httpBackend;
-	    var preysctrl;
-	    beforeEach(angular.mock.inject(function(_$httpBackend_) {
-	      $httpBackend = _$httpBackend_;
-	      preysctrl = $controller('PreysController');
+	    it('should increment a shark when addShark is called', angular.mock.inject(function(spStore) {
+	      expect(spStore.sharks.length).toBe(1);
 	    }));
 	
-	    afterEach(function() {
-	      $httpBackend.verifyNoOutstandingExpectation();
-	      $httpBackend.verifyNoOutstandingRequest();
-	    });
+	    it('should increment a prey when addPrey is called', angular.mock.inject(function(spStore) {
+	      expect(spStore.preys.length).toBe(1);
+	    }));
 	
-	    it('should send a GET to recieve preys', function() {
-	      $httpBackend.expectGET('http://localhost:5555/api/preys')
-	      .respond(200, [{ name: 'test prey' }]);
-	      preysctrl.getAll();
-	      $httpBackend.flush();
-	      expect(preysctrl.preys.length).toBe(1);
-	      expect(preysctrl.preys[0].name).toBe('test prey');
-	    });
-	
-	    it('should create a prey', function() {
-	      $httpBackend.expectPOST('http://localhost:5555/api/preys', { name: 'human' })
-	      .respond(200, { name: 'some prey' });
-	      expect(preysctrl.preys.length).toBe(0);
-	      preysctrl.newPrey = { name: 'human' };
-	      preysctrl.createPrey();
-	      $httpBackend.flush();
-	      expect(preysctrl.preys[0].name).toBe('some prey');
-	      expect(preysctrl.newPrey).toBe(null);
-	    });
-	
-	    it('should update a prey', function() {
-	      $httpBackend.expectPUT('http://localhost:5555/api/preys/1',
-	      { name: 'changed prey!', editing: true, _id: 1 }).respond(200);
-	
-	      preysctrl.preys = [{ name: 'test prey', editing: true, _id: 1 }];
-	      preysctrl.preys[0].name = 'changed prey!';
-	      preysctrl.updatePrey(preysctrl.preys[0]);
-	      $httpBackend.flush();
-	      expect(preysctrl.preys[0].editing).toBe(false);
-	    });
-	
-	    it('should delete a prey', function() {
-	      $httpBackend.expectDELETE('http://localhost:5555/api/preys/1').respond(200);
-	      preysctrl.preys = [{ name: 'human', _id: 1 }];
-	      preysctrl.removePrey(preysctrl.preys[0]);
-	      $httpBackend.flush();
-	      expect(preysctrl.remote.data.length).toBe(0);
-	    });
+	    it('should add the total of sharks and preys', angular.mock.inject(function(spStore) {
+	      spStore.total();
+	      expect(spStore.total()).toBe(2);
+	    }));
 	  });
 	});
 
