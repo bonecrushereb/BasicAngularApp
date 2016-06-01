@@ -9,7 +9,7 @@ module.exports = function(app) {
       addPrey: function(prey) {
         this.preys.push(prey);
       },
-      total: function(sharks, preys) {
+      total: function() {
         return this.sharks.length + this.preys.length;
       }
     };
