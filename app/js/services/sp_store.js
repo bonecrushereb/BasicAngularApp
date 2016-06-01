@@ -8,6 +8,9 @@ module.exports = function(app) {
       },
       addPrey: function(prey) {
         this.preys.push(prey);
+      },
+      total: function(sharks, preys) {
+        return this.sharks.length + this.preys.length;
       }
     };
   });
