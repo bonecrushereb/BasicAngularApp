@@ -16,13 +16,12 @@
       <li><a href="/#/results">Results</a></li>
     </ul>
   </nav>
-
+  
   <div data-ng-controller="AuthController as globalAuth" data-ng-init="globalAuth.getUsername()">
     <p data-ng-if="globalAuth.username">
       Hello: {{globalAuth.username}} <a href data-ng-click="globalAuth.logout()">Logout</a>
     </p>
     <main data-ng-view></main>
-  </div>
 <script src="./bundle.js"></script>
 </body>
 </html>
