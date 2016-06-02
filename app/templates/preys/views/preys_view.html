@@ -1,0 +1,24 @@
+<section data-ng-init="preysctrl.getAll()">
+  <h1>Prey:</h1>
+  <ul id="preyError">
+    <li class="error-message" data-ng-repeat="error in preysctrl.errors">{{error.message}}<button data-ng-click="preysctrl.errors.splice(preysctrl.errors.indexOf(error), 1)">x</button></li>
+  </ul>
+  <prey-form class="form"
+    data-button-text="Create Prey!"
+    data-action="create"
+    data-prey="preysctrl.newPrey">
+  </prey-form>
+
+  <ul class="item-list" id="preylist">
+    <prey-list-item data-ng-repeat="prey in preysctrl.preys" data-prey="prey">
+      <prey-form
+        data-ng-if="prey.editing"
+        data-button-text="Update Prey"
+        data-action="update"
+        data-prey="prey">
+        <button class="btn-cancel" data-ng-click="preysctrl.cancelPrey(prey)">Cancel</button>
+      </prey-form>
+    </prey-list-item>
+  </ul>
+
+</section>

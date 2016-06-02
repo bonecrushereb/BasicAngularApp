@@ -6,62 +6,22 @@
   <link rel="stylesheet" type="text/css" href="sass/style.css">
 </head>
 <body data-ng-app="angApp">
-  <main>
-
-    <section class="shark" data-ng-controller="SharksController as sharksctrl" data-ng-init="sharksctrl.getAll()">
-      <h1>Shark:</h1>
-      <ul id="sharkError">
-        <li class="error-message" data-ng-repeat="error in sharksctrl.errors">{{error.message}}<button data-ng-click="sharksctrl.errors.splice(sharksctrl.errors.indexOf(error), 1)">x</button></li>
-      </ul>
-      <shark-form class="form"
-        data-button-text="Create Shark!"
-        data-action="create"
-        data-shark="sharksctrl.newShark">
-      </shark-form>
-
-      <ul class="item-list" id="sharklist">
-        <shark-list-item data-ng-repeat="shark in sharksctrl.sharks" data-shark="shark">
-          <shark-form
-            data-ng-if="shark.editing"
-            data-button-text="Update Shark"
-            data-action="update"
-            data-shark="shark">
-            <button class="btn-cancel" data-ng-click="sharksctrl.cancelShark(shark)">Cancel</button>
-          </shark-form>
-        </shark-list-item>
-      </ul>
-
-      <p>The number of sharks in the list are: {{sharksctrl.sharks.length}}</p>
-    </section>
-
-    <section class ="prey" data-ng-controller="PreysController as preysctrl" data-ng-init="preysctrl.getAll()">
-      <h1>Prey:</h1>
-      <ul id="preyError">
-        <li class="error-message" data-ng-repeat="error in preysctrl.errors">{{error.message}}<button data-ng-click="preysctrl.errors.splice(preysctrl.errors.indexOf(error), 1)">x</button></li>
-      </ul>
-      <prey-form class="form"
-        data-button-text="Create Prey!"
-        data-action="create"
-        data-prey="preysctrl.newPrey">
-      </prey-form>
-
-      <ul class="item-list" id="preylist">
-        <prey-list-item data-ng-repeat="prey in preysctrl.preys" data-prey="prey">
-          <prey-form
-            data-ng-if="prey.editing"
-            data-button-text="Update Prey"
-            data-action="update"
-            data-prey="prey">
-            <button class="btn-cancel" data-ng-click="preysctrl.cancelPrey(prey)">Cancel</button>
-          </prey-form>
-        </prey-list-item>
-      </ul>
-
-      <p>The number of preys in the list are: {{preysctrl.preys.length}}</p>
-    </section>
-
-    <p data-ng-controller="SharksController as sharksctrl">The total resources: {{sharksctrl.total()}}</p>
-  </main>
+  <h1 class="header">Sharks vs Preys</h1>
+  <nav>
+    <ul>
+      <li><a href="/#/signin">SignIn</a></li>
+      <li><a href="/#/signup">SignUp</a></li>
+      <li><a href="/#/sharks">Sharks</a></li>
+      <li><a href="/#/preys">Preys</a></li>
+      <li><a href="/#/results">Results</a></li>
+    </ul>
+  </nav>
+  
+  <div data-ng-controller="AuthController as globalAuth" data-ng-init="globalAuth.getUsername()">
+    <p data-ng-if="globalAuth.username">
+      Hello: {{globalAuth.username}} <a href data-ng-click="globalAuth.logout()">Logout</a>
+    </p>
+    <main data-ng-view></main>
 <script src="./bundle.js"></script>
 </body>
 </html>
