@@ -10,7 +10,7 @@ module.exports = function(app) {
     Resource.prototype.getAll = function() {
         return $http.get(this.url)
           .then((res) => {
-            res.data.splice(0);
+            this.data.splice(0);
             for(var i = 0; i < res.data.length; i++)
               this.data.push(res.data[i]);
           }, spError(this.errors, 'could not fetch resource'))
