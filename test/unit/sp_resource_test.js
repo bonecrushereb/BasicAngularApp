@@ -19,7 +19,7 @@ describe('spResource service', function() {
     expect(typeof spResource).toBe('function');
   }));
 
-  it('should get all the resources', angular.mock.inject(function(spResource) {
+  it('should get all the resources', angular.mock.inject(function(spResource, $httpBackend) {
     $httpBackend.expectGET('http://localhost:5555/api/sharks').respond(200, [{ name: 'greate white' }]);
 
     var resourceArray = [{}, {}, {}];
