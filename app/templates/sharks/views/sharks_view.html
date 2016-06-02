@@ -1,0 +1,23 @@
+<section data-ng-init="sharksctrl.getAll()">
+  <h1>Shark:</h1>
+  <ul id="sharkError">
+    <li class="error-message" data-ng-repeat="error in sharksctrl.errors">{{error.message}}<button data-ng-click="sharksctrl.errors.splice(sharksctrl.errors.indexOf(error), 1)">x</button></li>
+  </ul>
+  <shark-form class="form"
+    data-button-text="Create Shark!"
+    data-action="create"
+    data-shark="sharksctrl.newShark">
+  </shark-form>
+
+  <ul class="item-list" id="sharklist">
+    <shark-list-item data-ng-repeat="shark in sharksctrl.sharks" data-shark="shark">
+      <shark-form
+        data-ng-if="shark.editing"
+        data-button-text="Update Shark"
+        data-action="update"
+        data-shark="shark">
+        <button class="btn-cancel" data-ng-click="sharksctrl.cancelShark(shark)">Cancel</button>
+      </shark-form>
+    </shark-list-item>
+  </ul>
+</section>

@@ -43,8 +43,13 @@ gulp.task('webpack:test', () => {
 });
 
 gulp.task('static:dev', ['webpack:dev'], () => {
-  gulp.src('app/**/*.html')
+  gulp.src(['app/**/*.html'])
   .pipe(gulp.dest('./build'));
+});
+
+gulp.task('image:dev', () => {
+  gulp.src('app/img/*')
+    .pipe(gulp.dest('./build/img'));
 });
 
 gulp.task('lint:dev', () => {
@@ -74,7 +79,7 @@ gulp.task('protractor', ['start:server'], () => {
 
 
 gulp.task('test', ['build:dev', 'lint:dev', 'protractor', 'start:server', 'webpack:test']);
-gulp.task('build:dev', ['webpack:dev', 'static:dev', 'sass:dev']);
+gulp.task('build:dev', ['webpack:dev', 'static:dev', 'image:dev', 'sass:dev']);
 gulp.task('default', ['test', 'build:dev']);
 
 gulp.task('sass:watch', ['sass:dev'], () => {

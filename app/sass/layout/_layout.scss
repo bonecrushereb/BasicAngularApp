@@ -1,3 +1,18 @@
+nav {
+  font-family: $surfer;
+  color: black;
+  text-shadow: 2px 2px white;
+  font-weight: bold;
+  font-size: 24px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+nav ul li {
+  display: inline-block;
+  padding: 10px;
+}
+
 section {
   @include gradient-two-color;
   margin: 5px;
@@ -10,6 +25,24 @@ h1{
   text-align: justify;
 }
 
+.header {
+  font-size: 36px;
+  color: black;
+}
+
+.results {
+  margin-left: 100px;
+  position: relative;
+  top: 100px;
+  left: 25%;
+}
+
+.results h2 {
+  font-family: $surfer;
+  font-size: 24px;
+  padding: 10px;
+}
+
 .form {
   position: relative;
   left: 40px;
@@ -20,4 +53,25 @@ h1{
   left: 10%;
   margin-top: 20px;
   font-size: 1.25em;
+}
+
+.auth {
+  width: 30%;
+  display: block;
+  position: relative;
+  left: 35%;
+  margin-top: 50px;
+}
+
+.auth input, .auth label {
+  padding: 10px;
+  display: inline-block;
+}
+
+.auth input {
+  width: 77%;
+}
+
+.auth label {
+  width: 20%;
 }
